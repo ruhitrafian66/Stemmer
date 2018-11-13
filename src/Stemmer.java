@@ -11,21 +11,25 @@ public class Stemmer {
 
         //splitting sentences
         String[] st = text.split("।");
+        String[] pr = text.split("\r\n|\r|\n");
 
         //main arraylists
         ArrayList<Sentence> sen = new ArrayList<>();
         MyArrayList<Word> word = new MyArrayList<>();
 
         //tokenize, create and populate arraylists
-        for (int c = 0; c < st.length; c++) {
-            String[] w = st[c].split(" ");
-            sen.add(new Sentence(c, st[c], false, w.length));
+        for(int i = 0; i<pr.length ; ++i){
 
-            for (int c1 = 0; c1 < w.length; c1++) {
-                if (!(word.contains(w[c1]))) {
-                    word.add(new Word(c, w[c1]));
-                } else {
-                    word.iterate(w[c1]);
+                for (int c = 0; c < st.length; c++) {
+                String[] w = st[c].split(" ");
+                sen.add(new Sentence(c, st[c], false, w.length,i+1));
+
+                for (int c1 = 0; c1 < w.length; c1++) {
+                    if (!(word.contains(w[c1]))) {
+                        word.add(new Word(c, w[c1]));
+                    } else {
+                        word.iterate(w[c1]);
+                    }
                 }
             }
         }
