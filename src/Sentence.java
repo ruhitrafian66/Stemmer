@@ -14,13 +14,15 @@ public class Sentence {
     int posScore;
     int cueScore;
     int paraNo;
+    int senNoForMultiPara;
 
-    public Sentence(int p, String st, boolean t, int l,int  paraNo){
+    public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoForMultiPara){
         pos = p;
         text = st;
         ts = t;
         len = l;
         this.paraNo = paraNo;
+        this.senNoForMultiPara = senNoForMultiPara;
         createWords();
     }
     public void createWords(){
