@@ -17,7 +17,8 @@ public class Stemmer {
                 "এর আগে ১০ নভেম্বর মনোনয়ন ফরম সংগ্রহ করাকে কেন্দ্র করে রাজধানীর মোহাম্মদপুরে আওয়ামী লীগের দুই পক্ষের সংঘর্ষের ঘটনায় দুই কিশোরের প্রাণহানি ঘটে। তখন ইসির ভূমিকা ছিল অনেকটাই নির্বিকার।";
 
         //splitting sentences
-        String[] st = text.split("।");
+        String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
+
         //spliting paragraphs
         String[] pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
@@ -31,6 +32,7 @@ public class Stemmer {
                 for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoForMultiPara));
+                ++senNoForMultiPara;
 
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
@@ -42,8 +44,8 @@ public class Stemmer {
             }
         }
 
-//        EvaluateLengthScore(sen);
-        //cue score
+        EvaluateLengthScore(sen);
+//        cue score
 //        EvaluateCueScore(sen);
     }
 
