@@ -27,12 +27,12 @@ public class Stemmer {
         MyArrayList<Word> word = new MyArrayList<>();
 
         //tokenize, create and populate arraylists
-        int senNoForMultiPara = 0;
+        int senNoDoc = 0;
         for(int i = 0; i<pr.length ; ++i){
                 for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
-                sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoForMultiPara));
-                ++senNoForMultiPara;
+                sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoDoc));
+                ++senNoDoc;
 
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
