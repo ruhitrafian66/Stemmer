@@ -29,6 +29,7 @@ public class Stemmer {
         //tokenize, create and populate arraylists
         int senNoDoc = 0;
         for(int i = 0; i<pr.length ; ++i){
+            //splitting sentences
             String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
             for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
@@ -79,25 +80,20 @@ public class Stemmer {
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
         }
-        for (int c = 0; c < sen.size(); c++) {
-            System.out.println(sen.get(c).pos);
-            System.out.println(sen.get(c).paraNo);
-            System.out.println(sen.get(c).text);
-            ///avgLength += sen.get(c).len;
-        }
-        for(int x= 0; x<pr.length; x++ ) {
-            System.out.println("second for");
-            while (sc.hasNextLine()) {
-                String cue = sc.nextLine();
-                for (int c = 0; c < sen.size(); c++) {
-                    String[] temp = sen.get(c).text.split(" ");
-                    for (int i = 0; i < temp.length; i++) {
-                        if (temp[i].equals(cue)) {
-                            if(x== sen.get(c).paraNo) {
-                                System.out.println(c + " " + cue);
-                                sen.get(c).cueScore++;
-                            }
-                        }
+//        for (int c = 0; c < sen.size(); c++) {
+//            System.out.println(sen.get(c).pos);
+//            System.out.println(sen.get(c).paraNo);
+//            System.out.println(sen.get(c).text);
+//            ///avgLength += sen.get(c).len;
+//        }
+        while (sc.hasNextLine()) {
+            String cue = sc.nextLine();
+            for (int c = 0; c < sen.size(); c++) {
+                String[] temp = sen.get(c).text.split(" ");
+                for (int i = 0; i < temp.length; i++) {
+                    if (temp[i].equals(cue)) {
+                        //System.out.println(c + " " + cue);
+                        sen.get(c).cueScore++;
                     }
                 }
             }
