@@ -30,6 +30,7 @@ public class Stemmer {
         //tokenize, create and populate arraylists
         int senNoDoc = 0;
         for(int i = 0; i<pr.length ; ++i){
+            //splitting sentences
             String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
             para.add(new Paragraph(st,i+1));
             for (int c = 0; c < st.length; c++) {
@@ -48,7 +49,11 @@ public class Stemmer {
 
 //        EvaluateLengthScore(sen);
 //        EvaluateCueScore(sen);
-          positionOfSentence(sen,para);
+
+//          positionOfSentence(sen,para);
+
+        EvaluateTopicSentenceScore(sen);
+
     }
 
     //evaluates length relative scores of each sentence
@@ -82,36 +87,45 @@ public class Stemmer {
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
         }
-        for (int c = 0; c < sen.size(); c++) {
-            System.out.println(sen.get(c).pos);
-            System.out.println(sen.get(c).paraNo);
-            System.out.println(sen.get(c).text);
-            ///avgLength += sen.get(c).len;
-        }
-        for(int x= 0; x<pr.length; x++ ) {
-            System.out.println("second for");
-            while (sc.hasNextLine()) {
-                String cue = sc.nextLine();
-                for (int c = 0; c < sen.size(); c++) {
-                    String[] temp = sen.get(c).text.split(" ");
-                    for (int i = 0; i < temp.length; i++) {
-                        if (temp[i].equals(cue)) {
-                            if(x== sen.get(c).paraNo) {
-                                System.out.println(c + " " + cue);
-                                sen.get(c).cueScore++;
-                            }
-                        }
+//        for (int c = 0; c < sen.size(); c++) {
+//            System.out.println(sen.get(c).pos);
+//            System.out.println(sen.get(c).paraNo);
+//            System.out.println(sen.get(c).text);
+//            ///avgLength += sen.get(c).len;
+//        }
+        while (sc.hasNextLine()) {
+            String cue = sc.nextLine();
+            for (int c = 0; c < sen.size(); c++) {
+                String[] temp = sen.get(c).text.split(" ");
+                for (int i = 0; i < temp.length; i++) {
+                    if (temp[i].equals(cue)) {
+                        //System.out.println(c + " " + cue);
+                        sen.get(c).cueScore++;
                     }
                 }
             }
         }
         for (int c = 0; c < sen.size(); c++) {
-            System.out.println("cue score" + sen.get(c).cueScore);
+            System.out.println("cue score sentence wise: " + sen.get(c).cueScore);
             ///avgLength += sen.get(c).len;
         }
 
     }
 
+    public static void EvaluateTopicSentenceScore(ArrayList<Sentence> sen)
+    {
+        for(int x=1; x<=pr.length; x++)
+        {
+            if(x==1)
+            {
+                String[] passage_topic= sen.get(0).text.split(" ");
+            }
+            else
+            {
+
+            }
+        }
+    }
     public static void EvaluateNumValScore(ArrayList<Sentence> sen) {
         CharSequence[] ch = new CharSequence[10];
         ch[0] = new StringBuffer("0");

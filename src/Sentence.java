@@ -23,11 +23,11 @@ public class Sentence {
         len = l;
         this.paraNo = paraNo;
         this.senNoDoc = senNoDoc;
-        createWords();
+        //createWords();
     }
-    public void createWords(){
+    public void createWords() {
+    }
 
-    }
 
     public String toString(){
         return text;
