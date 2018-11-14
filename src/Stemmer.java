@@ -32,10 +32,10 @@ public class Stemmer {
 
         //tokenize, create and populate arraylists
         int paraPos = 0;
-        for(int i = 0; i<pr.length ; ++i){
-                for (int c = 0; c < st.length; c++) {
+        for (int i = 0; i < pr.length; ++i) {
+            for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
-                sen.add(new Sentence(c, st[c], false, w.length,i+1, paraPos++));
+                sen.add(new Sentence(c, st[c], false, w.length, i + 1, paraPos++));
 
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
@@ -46,9 +46,6 @@ public class Stemmer {
                 }
             }
         }
-
-        EvaluateNumValScore(sen);
-//        printTest(sen, word);
     }
 
 //    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
@@ -59,8 +56,25 @@ public class Stemmer {
 //    }
 
 
-    public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word){
-        
+    public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word) {
+        double maxTF = 0;
+        for (Sentence s : sen) {
+            String[] w = s.text.split(" ");
+            double score = 0;
+            for (String i : w) {
+                int freq = word.lookUp(i);
+                double tf = freq*Math.log(sen.size()/freq);
+                score+=tf;
+            }
+            s.tfscore = score;
+            if(score>maxTF){
+                maxTF = score;
+            }
+        }
+
+        for(Sentence s: sen){
+            s.tfscore = s.tfscore/maxTF;
+        }
     }
 
 
@@ -143,12 +157,12 @@ public class Stemmer {
                 }
             }
         }
-        for(Sentence s: sen){
-            s.numScore = s.numScore/s.len;
+        for (Sentence s : sen) {
+            s.numScore = s.numScore / s.len;
         }
     }
 
-    public static void positionOfSentence(){
+    public static void positionOfSentence() {
 
     }
 }

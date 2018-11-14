@@ -7,7 +7,7 @@ public class Sentence {
     boolean ts = false;
     ArrayList<Word> w= new ArrayList<>();
 
-    int tfscore;
+    double tfscore;
     int lenScore;
     double numScore;
     int topicScore;
