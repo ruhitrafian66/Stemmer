@@ -128,7 +128,22 @@ public class Stemmer {
         }
     }
 
-    public static void positionOfSentence(){
+    public static void positionOfSentence(ArrayList<Sentence> sen){
+                for (Sentence sc: sen)
+        {
+            if(sc.senNoDoc <= Math.ceil(0.2*sen.size())){
+                sc.posScore = 10;
 
+            }else if(sc.senNoDoc >= Math.ceil(0.8*sen.size())){
+                sc.posScore = 10;
+            }else{
+                sc.posScore = 1;
+            }
+        }
+
+        for (Sentence sc: sen)
+        {
+            System.out.println(sc.senNoDoc+ " -> "+sc.posScore);
+        }
     }
 }
