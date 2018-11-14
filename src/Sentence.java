@@ -5,6 +5,7 @@ public class Sentence {
     String text;
     int len;
     boolean ts = false;
+    String [] words;
     ArrayList<Word> w= new ArrayList<>();
 
     int tfscore;
@@ -23,9 +24,11 @@ public class Sentence {
         len = l;
         this.paraNo = paraNo;
         this.senNoDoc = senNoDoc;
-        //createWords();
+        String[] words = createWords(st);
     }
-    public void createWords() {
+    public static String[] createWords(String s) {
+        String[] words = s.split(" ");
+        return words;
     }
 
 
