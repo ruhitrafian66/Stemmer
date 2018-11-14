@@ -46,7 +46,8 @@ public class Stemmer {
         }
 
 //        EvaluateLengthScore(sen);
-        EvaluateCueScore(sen);
+//        EvaluateCueScore(sen);
+        EvaluateTopicSentenceScore(sen);
     }
 
     //evaluates length relative scores of each sentence
@@ -99,12 +100,26 @@ public class Stemmer {
             }
         }
         for (int c = 0; c < sen.size(); c++) {
-            System.out.println("cue score" + sen.get(c).cueScore);
+            System.out.println("cue score sentence wise: " + sen.get(c).cueScore);
             ///avgLength += sen.get(c).len;
         }
 
     }
 
+    public static void EvaluateTopicSentenceScore(ArrayList<Sentence> sen)
+    {
+        for(int x=1; x<=pr.length; x++)
+        {
+            if(x==1)
+            {
+                String[] passage_topic= sen.get(0).text.split(" ");
+            }
+            else
+            {
+
+            }
+        }
+    }
     public static void EvaluateNumValScore(ArrayList<Sentence> sen) {
         CharSequence[] ch = new CharSequence[10];
         ch[0] = new StringBuffer("0");
