@@ -32,7 +32,7 @@ public class Sentence {
     public String toString(){
         return text;
     }
-//overrides default equals method so that contains can be used to check if sentence already present in arraylist
+    //overrides default equals method so that contains can be used to check if sentence already present in arraylist
     public boolean equals(Object o){
         if(o instanceof String){
             return text.equals(o);

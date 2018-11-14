@@ -45,8 +45,7 @@ public class Stemmer {
         }
 
 //        EvaluateLengthScore(sen);
-//        EvaluateCueScore(sen);
-        positionOfSentence(sen);
+        EvaluateCueScore(sen);
     }
 
     //evaluates length relative scores of each sentence
