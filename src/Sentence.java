@@ -13,12 +13,16 @@ public class Sentence {
     int topicScore;
     int posScore;
     int cueScore;
+    int paraNo;
+    int senNoDoc;
 
-    public Sentence(int p, String st, boolean t, int l){
+    public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoDoc){
         pos = p;
         text = st;
         ts = t;
         len = l;
+        this.paraNo = paraNo;
+        this.senNoDoc = senNoDoc;
         createWords();
     }
     public void createWords(){
