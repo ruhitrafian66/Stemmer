@@ -14,7 +14,7 @@ public class Sentence {
     int posScore;
     int cueScore;
     int paraNo;
-    int paraPos;
+    int senNoDoc;
 
     public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoDoc){
         pos = p;
@@ -22,7 +22,7 @@ public class Sentence {
         ts = t;
         len = l;
         this.paraNo = paraNo;
-        this.paraPos = senNoDoc;
+        this.senNoDoc = senNoDoc;
         createWords();
     }
     public void createWords(){
