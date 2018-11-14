@@ -46,6 +46,8 @@ public class Stemmer {
                 }
             }
         }
+
+//        EvaluateTFIDF(sen, word);
     }
 
 //    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
@@ -57,7 +59,8 @@ public class Stemmer {
 
 
     public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word) {
-        double maxTF = 0;
+        double maxIDF = 0;
+        int cnt = 1;
         for (Sentence s : sen) {
             String[] w = s.text.split(" ");
             double score = 0;
@@ -67,13 +70,14 @@ public class Stemmer {
                 score+=tf;
             }
             s.tfscore = score;
-            if(score>maxTF){
-                maxTF = score;
+            System.out.println(cnt++ +" "+score);
+            if(score>maxIDF){
+                maxIDF = score;
             }
         }
-
+        cnt = 1;
         for(Sentence s: sen){
-            s.tfscore = s.tfscore/maxTF;
+            s.tfscore = s.tfscore/maxIDF;
         }
     }
 
