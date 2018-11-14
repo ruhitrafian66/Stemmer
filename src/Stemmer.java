@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Stemmer {
-
+    public static String[] pr;
     public static void main(String[] args) {
         //single paragraphs
 //        String text = "সুতরাং একাদশ জাতী সংসদ নির্বাচন 13 তফসিল ঘোষণ পর মনোনয়ন ফরম বিক্রির প্রথম দিন দেশ প্রধান " +
@@ -17,10 +17,10 @@ public class Stemmer {
                 "এর আগে ১০ নভেম্বর মনোনয়ন ফরম সংগ্রহ করাকে কেন্দ্র করে রাজধানীর মোহাম্মদপুরে আওয়ামী লীগের দুই পক্ষের সংঘর্ষের ঘটনায় দুই কিশোরের প্রাণহানি ঘটে। তখন ইসির ভূমিকা ছিল অনেকটাই নির্বিকার।";
 
         //splitting sentences
-        String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
+        //String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
 
         //spliting paragraphs
-        String[] pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
+        pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
         //main arraylists
         ArrayList<Sentence> sen = new ArrayList<>();
@@ -29,11 +29,11 @@ public class Stemmer {
         //tokenize, create and populate arraylists
         int senNoDoc = 0;
         for(int i = 0; i<pr.length ; ++i){
+            String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
             for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoDoc));
                 ++senNoDoc;
-
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
                         word.add(new Word(c, w[c1]));
@@ -44,9 +44,8 @@ public class Stemmer {
             }
         }
 
-        EvaluateLengthScore(sen);
-//        cue score
-//        EvaluateCueScore(sen);
+//        EvaluateLengthScore(sen);
+        EvaluateCueScore(sen);
     }
 
     //evaluates length relative scores of each sentence
@@ -81,28 +80,27 @@ public class Stemmer {
             System.out.println("file not found");
         }
         for (int c = 0; c < sen.size(); c++) {
+            System.out.println(sen.get(c).pos);
+            System.out.println(sen.get(c).paraNo);
             System.out.println(sen.get(c).text);
             ///avgLength += sen.get(c).len;
         }
-        while (sc.hasNextLine()) {
-            String cue = sc.nextLine();
-            for (int c = 0; c < sen.size(); c++) {
-                String[] temp = sen.get(c).text.split(" ");
-                for (int i = 0; i < temp.length; i++) {
-                    if (temp[i].equals(cue)) {
-                        System.out.println(c + " " + cue);
-                        sen.get(c).cueScore++;
+        for(int x= 0; x<pr.length; x++ ) {
+            System.out.println("second for");
+            while (sc.hasNextLine()) {
+                String cue = sc.nextLine();
+                for (int c = 0; c < sen.size(); c++) {
+                    String[] temp = sen.get(c).text.split(" ");
+                    for (int i = 0; i < temp.length; i++) {
+                        if (temp[i].equals(cue)) {
+                            if(x== sen.get(c).paraNo) {
+                                System.out.println(c + " " + cue);
+                                sen.get(c).cueScore++;
+                            }
+                        }
                     }
                 }
             }
-            //if(sen.get(c).text.contains(cue))
-            //{
-            //    System.out.println(c +" " +cue);
-            //    sen.get(c).cueScore++;
-            //}
-            //System.out.println(sen.get(c).text);
-            ///avgLength += sen.get(c).len;
-            //}
         }
         for (int c = 0; c < sen.size(); c++) {
             System.out.println("cue score" + sen.get(c).cueScore);
