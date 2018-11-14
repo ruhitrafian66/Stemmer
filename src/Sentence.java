@@ -14,13 +14,15 @@ public class Sentence {
     int posScore;
     int cueScore;
     int paraNo;
+    int senNoDoc;
 
-    public Sentence(int p, String st, boolean t, int l,int  paraNo){
+    public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoDoc){
         pos = p;
         text = st;
         ts = t;
         len = l;
         this.paraNo = paraNo;
+        this.senNoDoc = senNoDoc;
         createWords();
     }
     public void createWords(){
@@ -30,7 +32,7 @@ public class Sentence {
     public String toString(){
         return text;
     }
-//overrides default equals method so that contains can be used to check if sentence already present in arraylist
+    //overrides default equals method so that contains can be used to check if sentence already present in arraylist
     public boolean equals(Object o){
         if(o instanceof String){
             return text.equals(o);
