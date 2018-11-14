@@ -58,7 +58,7 @@ public class Stemmer {
 //        EvaluateCueScore(sen);
 
 //          positionOfSentence(sen,para);
-
+        EvaluateTopicSentenceScore(sen);
 //        EvaluateTFIDF(sen, word);
     }
 
