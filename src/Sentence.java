@@ -8,9 +8,9 @@ public class Sentence {
     String [] words;
     ArrayList<Word> w= new ArrayList<>();
 
-    int tfscore;
+    double tfscore;
     int lenScore;
-    int numScore;
+    double numScore;
     int topicScore;
     int posScore;
     int cueScore;

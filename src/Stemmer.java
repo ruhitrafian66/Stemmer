@@ -11,11 +11,15 @@ public class Stemmer {
 //                " দু যেহেতু রাজনৈতিক দল জাতী কার্যাল ভিন্ন চিত্র দেখা গেছে। উৎসবমুখর পরিবাশ মনোনয়ন ফরম বিক্রি হ আওয়ামী লীগ" +
 //                " কার্যালয়ে। কিন্তু বিএনপি কার্যাল ন কোনো নির্বাচনী তৎপরতা।";
         //multiple paragraphs = 3
-        String text = "আদালত সূত্রে জানা গেছে, ২০০৭ সালের ৬ জানুয়ারি লাকসাম উপজেলার শ্রীয়াং বাজারে দোকান বন্ধ করে ক্ষুদ্র কাঁচামাল ব্যবসায়ী উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) ও পান ব্যবসায়ী বাচ্চু মিয়া (৩৫) ভ্যানে করে বাড়ি ফিরছিলেন। রাত ১২ টার দিকে লাকসামের শ্রীয়াং ও রাজাপুর সড়কের বদিরপুকুরে পৌঁছালে দণ্ডপ্রাপ্ত আসামিরা ডাকাত পরিচয় দিয়ে মাত্র এক হাজার ৪০০ টাকার জন্য সড়কের পাশে ফসলি জমিতে নিয়ে তিনজনকে গলা কেটে হত্যা করে। নিহত উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) মনোহরগঞ্জ উপজেলা প্রতাপপুর গ্রামের মণিন্দ্র দেবনাথের ছেলে। এ ছাড়া বাচ্চু মিয়া লাকসাম উপজেলার জগতপুর গ্রামের সামছুল হকের ছেলে। \n" +
+
+
+        String text = "আদালত সূত্রে জানা গেছে, ২০০৭ সালের ৬ জানুয়ারি লাকসাম উপজেলার শ্রীয়াং বাজারে দোকান বন্ধ করে ক্ষুদ্র কাঁচামাল ব্যবসায়ী উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) ও পান ব্যবসায়ী বাচ্চু মিয়া (৩৫) ভ্যানে করে বাড়ি ফিরছিলেন। রাত ১২টার দিকে লাকসামের শ্রীয়াং ও রাজাপুর সড়কের বদিরপুকুরে পৌঁছালে দণ্ডপ্রাপ্ত আসামিরা ডাকাত পরিচয় দিয়ে মাত্র এক হাজার ৪০০ টাকার জন্য সড়কের পাশে ফসলি জমিতে নিয়ে তিনজনকে গলা কেটে হত্যা করে। নিহত উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) মনোহরগঞ্জ উপজেলা প্রতাপপুর গ্রামের মণিন্দ্র দেবনাথের ছেলে। এ ছাড়া বাচ্চু মিয়া লাকসাম উপজেলার জগতপুর গ্রামের সামছুল হকের ছেলে। \n" +
+
                 "\n" +
                 "আদালত সূত্রে আরও জানা গেছে, ওই বছরের ৭ জানুয়ারি নিহত বাচ্চুর ছোট ভাই কবির হোসেন বাদী হয়ে লাকসাম থানায় একটি হত্যা মামলা দায়ের করেন। পরবর্তীতে দীর্ঘ ১০ মাস তদন্ত শেষে লাকসাম থানা-পুলিশ পাঁচজনকে আসামি করে আদালতে একটি অভিযোগপত্র দাখিল করেন। এরপর দীর্ঘ সময় ধরে এ মামলার শুনানি হয়। বুধবার রায় দেওয়া হয়।\n" +
                 "\n" +
                 "এ মামলার রাষ্ট্রপক্ষের আইনজীবী ছিলেন মো. আবু তাহের এবং আসামি পক্ষের আইনজীবী ছিলেন নাঈমা সুলতানা মুন্নি। রায়ে সন্তোষ প্রকাশ করে বাদী কবির হোসেন প্রথম আলোকে বলেন, ‘আসামিদের দ্রুত গ্রেপ্তার করে সাজা কার্যকর করতে হবে। এর মাধ্যমে আইনের শাসন নিশ্চিত হলো। সব ধরনের সমঝোতা প্রস্তাব ফিরিয়ে দিয়ে ও হুমকি সহ্য করে এ রায় পেয়েছি।";
+
         //splitting sentences
         //String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
 
@@ -28,6 +32,7 @@ public class Stemmer {
         ArrayList<Paragraph> para = new ArrayList<>();
 
         //tokenize, create and populate arraylists
+
         int senNoDoc = 0;
         for(int i = 0; i<pr.length ; ++i){
             //splitting sentences
@@ -37,6 +42,7 @@ public class Stemmer {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoDoc));
                 ++senNoDoc;
+
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
                         word.add(new Word(c, w[c1]));
@@ -47,23 +53,57 @@ public class Stemmer {
             }
         }
 
+
 //        EvaluateLengthScore(sen);
 //        EvaluateCueScore(sen);
 
 //          positionOfSentence(sen,para);
 
-        EvaluateTopicSentenceScore(sen);
-
+//        EvaluateTFIDF(sen, word);
     }
+
+//    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
+//        System.out.println("Position    "+"NumScore     "+"PosScore    "+"CueScore     "+"LenScore      "+"TFScore      ");
+//        for(Sentence s : sen){
+//            System.out.println(s.pos+"      "+s.numScore+"      +"      "+"     "+s.cueScore+");
+//        }
+//    }
+
+
+    public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word) {
+        double maxIDF = 0;
+        int cnt = 1;
+        for (Sentence s : sen) {
+            String[] w = s.text.split(" ");
+            double score = 0;
+            for (String i : w) {
+                int freq = word.lookUp(i);
+                double tf = freq*Math.log(sen.size()/freq);
+                score+=tf;
+            }
+            s.tfscore = score;
+            System.out.println(cnt++ +" "+score);
+            if(score>maxIDF){
+                maxIDF = score;
+            }
+        }
+        cnt = 1;
+        for(Sentence s: sen){
+            s.tfscore = s.tfscore/maxIDF;
+        }
+    }
+
+
+     
+
+    
 
     //evaluates length relative scores of each sentence
     public static void EvaluateLengthScore(ArrayList<Sentence> sen) {
         int avgLength = 0;
         for (int c = 0; c < sen.size(); c++) {
-            System.out.println(sen.get(c).len);
             avgLength += sen.get(c).len;
         }
-        System.out.println(avgLength);
         avgLength /= sen.size();
         int[] score = new int[sen.size()];
         for (int c = 0; c < sen.size(); c++) {
@@ -75,7 +115,6 @@ public class Stemmer {
             } else if (score[c] > 2) {
                 sen.get(c).lenScore = 0;
             }
-            System.out.println(sen.get(c).lenScore);
         }
     }
 
@@ -87,28 +126,31 @@ public class Stemmer {
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
         }
-//        for (int c = 0; c < sen.size(); c++) {
-//            System.out.println(sen.get(c).pos);
-//            System.out.println(sen.get(c).paraNo);
-//            System.out.println(sen.get(c).text);
-//            ///avgLength += sen.get(c).len;
-//        }
+
+        for (int c = 0; c < sen.size(); c++) {
+            ///avgLength += sen.get(c).len;
+        }
+
         while (sc.hasNextLine()) {
             String cue = sc.nextLine();
             for (int c = 0; c < sen.size(); c++) {
                 String[] temp = sen.get(c).text.split(" ");
                 for (int i = 0; i < temp.length; i++) {
                     if (temp[i].equals(cue)) {
-                        //System.out.println(c + " " + cue);
+
+//                        System.out.println(c + " " + cue);
+
                         sen.get(c).cueScore++;
                     }
                 }
             }
         }
-        for (int c = 0; c < sen.size(); c++) {
-            System.out.println("cue score sentence wise: " + sen.get(c).cueScore);
-            ///avgLength += sen.get(c).len;
-        }
+
+//        for (int c = 0; c < sen.size(); c++) {
+//            System.out.println("cue score" + sen.get(c).cueScore);
+//            ///avgLength += sen.get(c).len;
+//        }
+
 
     }
 
@@ -169,7 +211,11 @@ public class Stemmer {
                 }
             }
         }
+        for (Sentence s : sen) {
+            s.numScore = s.numScore / s.len;
+        }
     }
+
 
     public static void positionOfSentence(ArrayList<Sentence> sen,ArrayList<Paragraph> para){
         for(Paragraph pr: para){
@@ -182,6 +228,7 @@ public class Stemmer {
                     sc.posScore += 1;
                 }
             }
+
 
 
         }
