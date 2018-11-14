@@ -21,7 +21,15 @@ public class MyArrayList<E> extends ArrayList<E> {
         }
         return false;
     }
-
+    public int lookUp(String s){
+        for(int c = 0;c<size();c++){
+            Word w = (Word)this.get(c);
+            if(s.equals(w.toString())){
+                return w.freq;
+            }
+        }
+        return 0;
+    }
 
     public String toString(){
         String ret = "";
