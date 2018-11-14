@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Scanner;
@@ -10,11 +11,14 @@ public class Stemmer {
 //                " দু যেহেতু রাজনৈতিক দল জাতী কার্যাল ভিন্ন চিত্র দেখা গেছে। উৎসবমুখর পরিবাশ মনোনয়ন ফরম বিক্রি হ আওয়ামী লীগ" +
 //                " কার্যালয়ে। কিন্তু বিএনপি কার্যাল ন কোনো নির্বাচনী তৎপরতা।";
         //multiple paragraphs = 3
-        String text = "নির্বাচনে দলের সম্ভাব্য প্রার্থী ও কর্মী-সমর্থকদের আচরণবিধি মেনে চলাতে কঠোর হওয়ার জন্য আইনশৃঙ্খলা রক্ষাকারী বাহিনীকে চিঠি দিয়েছে নির্বাচন কমিশন (ইসি)। আজ মঙ্গলবার এ–সংক্রান্ত চিঠি পুলিশের মহাপরিদর্শক (আইজিপি) বরাবর পাঠিয়েছে নির্বাচন কমিশন।\n" +
+        String text = "নির্বাচনে দলের সম্ভাব্য প্রার্থী ও কর্মী-সমর্থকদের আচরণবিধি মেনে চলাতে কঠোর হওয়ার জন্য আইনশৃঙ্খলা রক্ষাকারী বাহিনীকে চিঠি" +
+                " দিয়েছে নির্বাচন কমিশন (ইসি)। আজ মঙ্গলবার এ–সংক্রান্ত চিঠি পুলিশের মহাপরিদর্শক (আইজিপি) বরাবর পাঠিয়েছে নির্বাচন কমিশন।\n" +
                 "\n" +
-                "নির্বাচন কমিশন চিঠিটি এমন সময়ে দিল যখন আচরণবিধি ভঙ্গ করে রাজধানীতে বিএনপি অফিসের সামনে হাজার হাজার নেতা-কর্মী জড়ো হতে শুরু করেছেন এবং আওয়ামী লীগের নেতা-কর্মীরা নানাভাবে আচরণবিধি লঙ্ঘন করে দলীয় মনোনয়ন ফরম সংগ্রহের কাজ শেষ হয়েছে।\n" +
+                "নির্বাচন কমিশন চিঠিটি এমন সময়ে দিল যখন আচরণবিধি ভঙ্গ করে রাজধানীতে বিএনপি অফিসের সামনে হাজার হাজার নেতা-কর্মী জড়ো " +
+                "হতে শুরু করেছেন এবং আওয়ামী লীগের নেতা-কর্মীরা নানাভাবে আচরণবিধি লঙ্ঘন করে দলীয় মনোনয়ন ফরম সংগ্রহের কাজ শেষ হয়েছে।\n" +
                 "\n" +
-                "এর আগে ১০ নভেম্বর মনোনয়ন ফরম সংগ্রহ করাকে কেন্দ্র করে রাজধানীর মোহাম্মদপুরে আওয়ামী লীগের দুই পক্ষের সংঘর্ষের ঘটনায় দুই কিশোরের প্রাণহানি ঘটে। তখন ইসির ভূমিকা ছিল অনেকটাই নির্বিকার।";
+                "এর আগে ১০ নভেম্বর মনোনয়ন ফরম সংগ্রহ করাকে কেন্দ্র করে রাজধানীর মোহাম্মদপুরে আওয়ামী লীগের দুই পক্ষের সংঘর্ষের ঘটনায় দুই " +
+                "কিশোরের প্রাণহানি ঘটে। তখন ইসির ভূমিকা ছিল অনেকটাই নির্বিকার।";
 
         //splitting sentences
         String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
@@ -27,12 +31,12 @@ public class Stemmer {
         MyArrayList<Word> word = new MyArrayList<>();
 
         //tokenize, create and populate arraylists
-        int senNoDoc = 0;
+        int paraPos = 0;
         for(int i = 0; i<pr.length ; ++i){
                 for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
-                sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoDoc));
-                ++senNoDoc;
+                sen.add(new Sentence(c, st[c], false, w.length,i+1, paraPos));
+                ++paraPos;
 
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
@@ -45,9 +49,13 @@ public class Stemmer {
         }
 
         EvaluateLengthScore(sen);
-//        cue score
 //        EvaluateCueScore(sen);
     }
+
+    public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word){
+        
+    }
+
 
     //evaluates length relative scores of each sentence
     public static void EvaluateLengthScore(ArrayList<Sentence> sen) {
