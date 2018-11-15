@@ -5,6 +5,7 @@ public class Sentence {
     String text;
     int len;
     boolean ts = false;
+    String [] words;
     ArrayList<Word> w= new ArrayList<>();
 
     double tfscore;
@@ -14,7 +15,7 @@ public class Sentence {
     int posScore;
     int cueScore;
     int paraNo;
-    int paraPos;
+    int senNoDoc;
 
     public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoDoc){
         pos = p;
@@ -22,17 +23,19 @@ public class Sentence {
         ts = t;
         len = l;
         this.paraNo = paraNo;
-        this.paraPos = senNoDoc;
-        createWords();
+        this.senNoDoc = senNoDoc;
+        String[] words = createWords(st);
     }
-    public void createWords(){
+    public static String[] createWords(String s) {
+        String[] words = s.split(" ");
+        return words;
+    }
 
-    }
 
     public String toString(){
         return text;
     }
-//overrides default equals method so that contains can be used to check if sentence already present in arraylist
+    //overrides default equals method so that contains can be used to check if sentence already present in arraylist
     public boolean equals(Object o){
         if(o instanceof String){
             return text.equals(o);
