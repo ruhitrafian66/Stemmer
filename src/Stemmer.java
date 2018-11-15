@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Stemmer {
     public static String[] pr;
+    public static ArrayList<Sentence> sen;
     public static void main(String[] args) {
         //single paragraphs
 //        String text = "সুতরাং একাদশ জাতী সংসদ নির্বাচন 13 তফসিল ঘোষণ পর মনোনয়ন ফরম বিক্রির প্রথম দিন দেশ প্রধান " +
@@ -27,7 +28,8 @@ public class Stemmer {
         pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
         //main arraylists
-        ArrayList<Sentence> sen = new ArrayList<>();
+        //ArrayList<Sentence>
+                sen = new ArrayList<>();
         MyArrayList<Word> word = new MyArrayList<>();
         ArrayList<Paragraph> para = new ArrayList<>();
 
@@ -58,7 +60,7 @@ public class Stemmer {
 //        EvaluateCueScore(sen);
 
 //          positionOfSentence(sen,para);
-        EvaluateTopicSentenceScore(sen);
+        EvaluateTopicSentenceScore(sen, para);
 //        EvaluateTFIDF(sen, word);
     }
 
@@ -93,10 +95,6 @@ public class Stemmer {
         }
     }
 
-
-     
-
-    
 
     //evaluates length relative scores of each sentence
     public static void EvaluateLengthScore(ArrayList<Sentence> sen) {
@@ -154,7 +152,7 @@ public class Stemmer {
 
     }
 
-    public static void EvaluateTopicSentenceScore(ArrayList<Sentence> sen)
+    public static void EvaluateTopicSentenceScore(ArrayList<Sentence> sen, ArrayList<Paragraph> para)
     {
         for(int x=1; x<=pr.length; x++)
         {
@@ -175,6 +173,25 @@ public class Stemmer {
                 }
             }
             else{
+                String paragraph = para.get(x-1).para; //fetching the paragraph
+                String [] sentences = Paragraph.createSentences(paragraph);
+                String [] para_topic = Sentence.createWords(sentences[0]);
+                for(int x= 0; x<sentences.length; x++)
+                {
+                    String [] words= Sentence.createWords(sentences[x]);
+                    for(int i=0; i<para_topic.length; i++)
+                    {
+                        for(int j=0; j<words.length; j++)
+                        {
+                            if(words[j].equals(para_topic[i]))
+                            {
+                                sen.get().topicScore++;
+                            }
+                        }
+                    }
+
+                }
+
 
             }
 
