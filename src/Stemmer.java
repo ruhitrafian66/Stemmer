@@ -37,7 +37,7 @@ public class Stemmer {
         for(int i = 0; i<pr.length ; ++i){
             //splitting sentences
             String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
-            para.add(new Paragraph(st,i+1));
+            para.add(new Paragraph(st,i+1,pr[i]));
             for (int c = 0; c < st.length; c++) {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length,i+1, senNoDoc));
@@ -58,7 +58,7 @@ public class Stemmer {
 //        EvaluateCueScore(sen);
 
 //          positionOfSentence(sen,para);
-
+        EvaluateTopicSentenceScore(sen);
 //        EvaluateTFIDF(sen, word);
     }
 
