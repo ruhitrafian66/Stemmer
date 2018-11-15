@@ -46,9 +46,9 @@ public class Stemmer {
                 }
             }
         }
+    }
 
 //        EvaluateTFIDF(sen, word);
-    }
 
 //    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
 //        System.out.println("Position    "+"NumScore     "+"PosScore    "+"CueScore     "+"LenScore      "+"TFScore      ");
@@ -70,7 +70,6 @@ public class Stemmer {
                 score+=tf;
             }
             s.tfscore = score;
-            System.out.println(cnt++ +" "+score);
             if(score>maxIDF){
                 maxIDF = score;
             }
