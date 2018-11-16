@@ -1,10 +1,11 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Scanner;
 
 public class Stemmer {
     public static String[] pr;
+
+    public static ArrayList<Sentence> sen;
 
     public static void main(String[] args) {
         //single paragraphs
@@ -29,7 +30,8 @@ public class Stemmer {
         pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
         //main arraylists
-        ArrayList<Sentence> sen = new ArrayList<>();
+        //ArrayList<Sentence>
+        sen = new ArrayList<>();
         MyArrayList<Word> word = new MyArrayList<>();
         ArrayList<Paragraph> para = new ArrayList<>();
 
@@ -53,18 +55,8 @@ public class Stemmer {
                     }
                 }
             }
-//            EvaluateLengthScore(sen);
-        EvaluateTFIDF(sen, word);
-            for(Sentence s : sen){
-                System.out.println(s.tfscore);
-            }
-            //        EvaluateCueScore(sen);
-
-//          positionOfSentence(sen,para);
-//        EvaluateTopicSentenceScore();
         }
     }
-
 
 //    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
 //        System.out.println("Position    "+"NumScore     "+"PosScore    "+"CueScore     "+"LenScore      "+"TFScore      ");
@@ -74,7 +66,7 @@ public class Stemmer {
 //    }
 
 
-    public static void EvaluateTFIDF(ArrayList<Sentence> sen, MyArrayList<Word> word) {
+    public static void EvaluateTFIDF(MyArrayList<Word> word) {
         double maxIDF = 0;
         int cnt = 1;
         for (Sentence s : sen) {
@@ -98,7 +90,7 @@ public class Stemmer {
 
 
     //evaluates length relative scores of each sentence
-    public static void EvaluateLengthScore(ArrayList<Sentence> sen) {
+    public static void EvaluateLengthScore() {
         int avgLength = 0;
         for (int c = 0; c < sen.size(); c++) {
             avgLength += sen.get(c).len;
@@ -117,7 +109,7 @@ public class Stemmer {
         }
     }
 
-    public static void EvaluateCueScore(ArrayList<Sentence> sen) {
+    public static void EvaluateCueScore() {
         File cue_words = new File("cue_words.txt");
         Scanner sc = null;
         try {
@@ -153,7 +145,7 @@ public class Stemmer {
 
     }
 
-    public static void EvaluateTopicSentenceScore(ArrayList<Sentence> sen) {
+    public static void EvaluateTopicSentenceScore(ArrayList<Paragraph> para) {
         for (int x = 1; x <= pr.length; x++) {
             if (x == 1) {
                 String[] passage_topic = sen.get(0).text.split(" ");
@@ -170,6 +162,20 @@ public class Stemmer {
                     }
                 }
             } else {
+                String paragraph = para.get(x - 1).para; //fetching the paragraph
+                String[] sentences = Paragraph.createSentences(paragraph);
+                String[] para_topic = Sentence.createWords(sentences[0]);
+                for (x = 0; x < sentences.length; x++) {
+                    String[] words = Sentence.createWords(sentences[x]);
+                    for (int i = 0; i < para_topic.length; i++) {
+                        for (int j = 0; j < words.length; j++) {
+                            if (words[j].equals(para_topic[i])) {
+                                sen.get(1).topicScore++;
+                            }
+                        }
+                    }
+
+                }
 
             }
 
@@ -186,7 +192,7 @@ public class Stemmer {
         }
     }
 
-    public static void EvaluateNumValScore(ArrayList<Sentence> sen) {
+    public static void EvaluateNumValScore() {
         CharSequence[] ch = new CharSequence[10];
         ch[0] = new StringBuffer("0");
         ch[1] = new StringBuffer("১");
