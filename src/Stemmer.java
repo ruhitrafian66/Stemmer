@@ -181,19 +181,17 @@ public class Stemmer {
                 for(int k= 0; k<sentences.length; k++)
                 {
                     String [] words= Sentence.createWords(sentences[k]); //test sentence broken into words
-                    for(int i=0; i<para_topic.length; i++)
-                    {
-                        for(int j=0; j<words.length; j++)
-                        {
+                    for(int i=0; i<para_topic.length; i++) {
+                        for(int j=0; j<words.length; j++) {
                             if(words[j].equals(para_topic[i])) {
-                                for (int z = 0; z < sen.size(); z++)
-                                {
-                                    if(sen.get(z).text.equals(sentences[k]))
-                                    {
-                                        //System.out.println(sen.get(z).text);
-                                        //System.out.println(words[j]);
-                                        sen.get(z).topicScore++;
-                                        //System.out.println("Topic score updated: "+sen.get(z).senNoDoc +" "+ sen.get(z).topicScore);
+                                for (int z = 0; z < sen.size(); z++) {
+                                    if(sen.get(z).text.equals(sentences[k])) {
+                                        if(sen.get(z).paraNo == x) {
+                                            //System.out.println(sen.get(z).text);
+                                            //System.out.println(words[j]);
+                                            sen.get(z).topicScore++;
+                                            //System.out.println("Topic score updated: " + sen.get(z).senNoDoc + " " + sen.get(z).topicScore);
+                                        }
                                     }
                                 }
                                 //Sentence temp= MyArrayList.getSentence(sentences[k]);
