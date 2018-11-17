@@ -7,7 +7,6 @@ public class Sentence {
     boolean ts = false;
     String [] words;
     ArrayList<Word> w= new ArrayList<>();
-
     double tfscore;
     int lenScore;
     double numScore;
