@@ -15,7 +15,6 @@ public class Stemmer {
         //multiple paragraphs = 3
         ActualStemmer as = new ActualStemmer();
         String text = as.StemmedText();
-        System.out.println(text);
 //        String text = "আদালত সূত্রে জানা গেছে, ২০০৭ সালের ৬ জানুয়ারি লাকসাম উপজেলার শ্রীয়াং বাজারে দোকান বন্ধ করে ক্ষুদ্র কাঁচামাল ব্যবসায়ী উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) ও পান ব্যবসায়ী বাচ্চু মিয়া (৩৫) ভ্যানে করে বাড়ি ফিরছিলেন। রাত ১২টার দিকে লাকসামের শ্রীয়াং ও রাজাপুর সড়কের বদিরপুকুরে পৌঁছালে দণ্ডপ্রাপ্ত আসামিরা ডাকাত পরিচয় দিয়ে মাত্র এক হাজার ৪০০ টাকার জন্য সড়কের পাশে ফসলি জমিতে নিয়ে তিনজনকে গলা কেটে হত্যা করে। নিহত উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) মনোহরগঞ্জ উপজেলা প্রতাপপুর গ্রামের মণিন্দ্র দেবনাথের ছেলে। এ ছাড়া বাচ্চু মিয়া লাকসাম উপজেলার জগতপুর গ্রামের সামছুল হকের ছেলে। \n" +
 //
 //                "\n" +
@@ -46,7 +45,6 @@ public class Stemmer {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length, i + 1, senNoDoc));
                 ++senNoDoc;
-
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
                         word.add(new Word(c, w[c1]));
@@ -56,15 +54,14 @@ public class Stemmer {
                 }
             }
         }
+
     }
 
-//    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
-//        System.out.println("Position    "+"NumScore     "+"PosScore    "+"CueScore     "+"LenScore      "+"TFScore      ");
-//        for(Sentence s : sen){
-//            System.out.println(s.pos+"      "+s.numScore+"      +"      "+"     "+s.cueScore+");
-//        }
-//    }
-
+    public static void printTest(MyArrayList<Word> word){
+        for(Sentence s : sen){
+            System.out.println();
+        }
+    }
 
     public static void EvaluateTFIDF(MyArrayList<Word> word) {
         double maxIDF = 0;
@@ -87,7 +84,6 @@ public class Stemmer {
             s.tfscore = s.tfscore / maxIDF;
         }
     }
-
 
     //evaluates length relative scores of each sentence
     public static void EvaluateLengthScore() {
