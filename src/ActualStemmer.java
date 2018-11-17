@@ -1,37 +1,48 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
+import java.io.*;
+import java.util.ArrayList;
 
 public class ActualStemmer {
     /**
      * The program will be run using the following command:<p>
      * {@code Stemmer rulesfile inputfile}.
      */
-    public static String StemmedText()
+    public static String StemmedText() {
+        //reading files
+        File stopFile = null;
+        File inputFile = null;
+        RuleFileParser parser = null;
+        try {
+             stopFile = new File("C:\\Users\\ruhit\\IdeaProjects\\Stemmer\\stopwords.txt");
+             parser = new RuleFileParser("C:\\Users\\ruhit\\IdeaProjects\\Stemmer\\stem.rules");
+             inputFile = new File("C:\\Users\\ruhit\\IdeaProjects\\Stemmer\\input.txt");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
-    {
-        String ruleFilePath = "C:\\Users\\ruhit\\IdeaProjects\\Stemmer\\stem.rules";
-        String inputFilePath = "C:\\Users\\ruhit\\IdeaProjects\\Stemmer\\a.txt";
+        //reading stopwords into arraylist stop
+        ArrayList<String> stop = new ArrayList<>();
+        String s;
+        try {
+            BufferedReader f = new BufferedReader(new FileReader(stopFile));
+            while ((s = f.readLine()) != null) {
+                stop.add(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("File not found, please check filepaths");
+        }
 
-        RuleFileParser parser = new RuleFileParser(ruleFilePath);
-
-        File file = new File(inputFilePath);
-
+        //stemming and stopword removal
         try (BufferedReader inputFileReader =
-                     new BufferedReader(new FileReader(file))) {
+                     new BufferedReader(new FileReader(inputFile))) {
+
             String line;
             String ret = "";
             while ((line = inputFileReader.readLine()) != null) {
-//				System.out.println(line);
                 for (String word : line.split("[\\s%,ঃ]+")) {
-//					System.out.print(parser.stemOfWord(word) + " ");
-                    ret += parser.stemOfWord(word) + " ";
+                    if (!(stop.contains(word))) {
+                        ret += parser.stemOfWord(word) + " ";
+                    }
                 }
                 return ret;
             }

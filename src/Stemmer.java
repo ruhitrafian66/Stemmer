@@ -1,11 +1,15 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.io.*;
 import java.util.Scanner;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class Stemmer {
-    public static String[] pr;
-
+    public static String [] pr;
     public static ArrayList<Sentence> sen;
+    public static MyArrayList<Word> word;
+    public static ArrayList<Paragraph> para;
 
     public static void main(String[] args) {
         //single paragraphs
@@ -30,10 +34,9 @@ public class Stemmer {
         pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
         //main arraylists
-        //ArrayList<Sentence>
         sen = new ArrayList<>();
-        MyArrayList<Word> word = new MyArrayList<>();
-        ArrayList<Paragraph> para = new ArrayList<>();
+        word = new MyArrayList<>();
+        para = new ArrayList<>();
 
         //tokenize, create and populate arraylists
 
@@ -46,7 +49,6 @@ public class Stemmer {
                 String[] w = st[c].split(" ");
                 sen.add(new Sentence(c, st[c], false, w.length, i + 1, senNoDoc));
                 ++senNoDoc;
-
                 for (int c1 = 0; c1 < w.length; c1++) {
                     if (!(word.contains(w[c1]))) {
                         word.add(new Word(c, w[c1]));
@@ -56,17 +58,16 @@ public class Stemmer {
                 }
             }
         }
+        Finalize();
     }
 
-//    public static void printTest(ArrayList<Sentence> sen, MyArrayList<Word> word){
-//        System.out.println("Position    "+"NumScore     "+"PosScore    "+"CueScore     "+"LenScore      "+"TFScore      ");
-//        for(Sentence s : sen){
-//            System.out.println(s.pos+"      "+s.numScore+"      +"      "+"     "+s.cueScore+");
-//        }
-//    }
+    public static void printTest() {
+        for (Sentence s : sen) {
+            System.out.println();
+        }
+    }
 
-
-    public static void EvaluateTFIDF(MyArrayList<Word> word) {
+    public static void EvaluateTFIDF() {
         double maxIDF = 0;
         int cnt = 1;
         for (Sentence s : sen) {
@@ -87,7 +88,6 @@ public class Stemmer {
             s.tfscore = s.tfscore / maxIDF;
         }
     }
-
 
     //evaluates length relative scores of each sentence
     public static void EvaluateLengthScore() {
@@ -145,7 +145,7 @@ public class Stemmer {
 
     }
 
-    public static void EvaluateTopicSentenceScore(ArrayList<Paragraph> para) {
+    public static void EvaluateTopicSentenceScore() {
         for (int x = 1; x <= pr.length; x++) {
             if (x == 1) {
                 String[] passage_topic = sen.get(0).text.split(" ");
@@ -196,11 +196,12 @@ public class Stemmer {
             }
 
         }
-
+        String sc = sen.get(1).text;
+        String[] wor = Sentence.createWords(sc);
+        for (int c = 0; c < wor.length; c++) {
+            ///avgLength += sen.get(c).len;
+        }
         for (int c = 0; c < sen.size(); c++) {
-            //System.out.println("topic score sentence wise: " + sen.get(c).senNoDoc +" "+ sen.get(c).topicScore);
-
-
             ///avgLength += sen.get(c).len;
         }
     }
@@ -231,22 +232,50 @@ public class Stemmer {
         }
     }
 
-
-    public static void positionOfSentence(ArrayList<Sentence> sen, ArrayList<Paragraph> para) {
+    public static void EvaluatePositionScore() {
         for (Paragraph pr : para) {
             for (Sentence sc : sen) {
                 if (sc.paraNo == pr.paraNo && sc.pos <= Math.ceil(0.1 * pr.noOfSentences)) {
-                    sc.posScore += 10;
-                } else if (sc.paraNo == pr.paraNo && sc.pos >= Math.floor(0.9 * pr.noOfSentences)) {
-                    sc.posScore += 10;
-                } else if (sc.paraNo == pr.paraNo) {
                     sc.posScore += 1;
+                } else if (sc.paraNo == pr.paraNo && sc.pos >= Math.floor(0.9 * pr.noOfSentences)) {
+                    sc.posScore += 1;
+                } else if (sc.paraNo == pr.paraNo) {
+                    sc.posScore += 0;
                 }
             }
         }
-        for (Sentence sc : sen) {
-//            System.out.println(sc.text);
-//            System.out.println(sc.senNoDoc + " -> " + sc.posScore);
+    }
+
+    public static void evaluate() {
+
+    }
+
+    //double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
+    public static void Finalize() {
+        //
+        EvaluateTFIDF();
+        EvaluateLengthScore();
+        EvaluateCueScore();
+        EvaluateTopicSentenceScore();
+        EvaluatePositionScore();
+        EvaluateNumValScore();
+
+
+        double[][] score = new double[sen.size()][6];
+        int i = 0;
+        DecimalFormat df2 = new DecimalFormat(".##");
+        for (Sentence s : sen) {
+            score[i][0] = s.tfscore;
+            score[i][1] = s.numScore;
+            score[i][2] = s.lenScore;
+            score[i][3] = s.cueScore;
+            score[i][4] = s.topicScore;
+            score[i++][5] = s.posScore;
+        }
+        for (Sentence s : sen) {
+//            System.out.println(s.text);
+            System.out.println(df2.format(s.tfscore) + "     " + df2.format(s.posScore) + "      " + df2.format(s.lenScore)
+                    + "      " + df2.format(s.cueScore) + "      " + df2.format(s.numScore) + "      " + df2.format(s.topicScore));
         }
     }
 }
