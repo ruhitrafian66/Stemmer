@@ -157,20 +157,36 @@ public class Stemmer {
                             if (temp[i].equals(passage_topic[y])) {
 
                                 sen.get(c).topicScore++;
+                                //System.out.println("topic score for the very first line" + " " + sen.get(c).pos+" "+ sen.get(c).topicScore);
                             }
                         }
                     }
                 }
-            } else {
-                String paragraph = para.get(x - 1).para; //fetching the paragraph
-                String[] sentences = Paragraph.createSentences(paragraph);
-                String[] para_topic = Sentence.createWords(sentences[0]);
-                for (x = 0; x < sentences.length; x++) {
-                    String[] words = Sentence.createWords(sentences[x]);
-                    for (int i = 0; i < para_topic.length; i++) {
-                        for (int j = 0; j < words.length; j++) {
-                            if (words[j].equals(para_topic[i])) {
-                                sen.get(1).topicScore++;
+            }
+            else{
+                String paragraph = para.get(x-1).para; //fetching the paragraph
+                String [] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
+                //System.out.println(sentences[0]);
+                String [] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
+                for(int k= 0; k<sentences.length; k++)
+                {
+                    String [] words= Sentence.createWords(sentences[k]); //test sentence broken into words
+                    for(int i=0; i<para_topic.length; i++) {
+                        for(int j=0; j<words.length; j++) {
+                            if(words[j].equals(para_topic[i])) {
+                                for (int z = 0; z < sen.size(); z++) {
+                                    if(sen.get(z).text.equals(sentences[k])) {
+                                        if(sen.get(z).paraNo == x) {
+                                            //System.out.println(sen.get(z).text);
+                                            //System.out.println(words[j]);
+                                            sen.get(z).topicScore++;
+                                            //System.out.println("Topic score updated: " + sen.get(z).senNoDoc + " " + sen.get(z).topicScore);
+                                        }
+                                    }
+                                }
+                                //Sentence temp= MyArrayList.getSentence(sentences[k]);
+                                //temp.topicScore++;
+
                             }
                         }
                     }
