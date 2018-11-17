@@ -1,3 +1,5 @@
+import com.sun.nio.file.SensitivityWatchEventModifier;
+
 import java.util.ArrayList;
 
 public class MyArrayList<E> extends ArrayList<E> {
@@ -11,6 +13,17 @@ public class MyArrayList<E> extends ArrayList<E> {
             }
         }
     }
+///    public Sentence getSentence(String s){
+//        for(int c = 0;c<this.size();c++){
+//            Sentence w = (Sentence) this.get(c);
+//            if(w.text.equals(s)){
+//                return w;
+//            }
+//            else {
+//                return
+//            }
+//        }
+//    }
 
     public boolean contains(String s){
         for(int c = 0;c<size();c++){
