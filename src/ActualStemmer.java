@@ -37,15 +37,19 @@ public class ActualStemmer {
                      new BufferedReader(new FileReader(inputFile))) {
 
             String line;
-            String ret = "";
+
+            StringBuilder sb = new StringBuilder();
             while ((line = inputFileReader.readLine()) != null) {
+                String ret = "";
                 for (String word : line.split("[\\s%,ঃ]+")) {
                     if (!(stop.contains(word))) {
                         ret += parser.stemOfWord(word) + " ";
                     }
                 }
-                return ret;
+                sb.append(ret);
             }
+
+            return sb.toString();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
