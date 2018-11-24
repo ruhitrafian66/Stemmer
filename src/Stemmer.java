@@ -1,36 +1,27 @@
+import com.opencsv.CSVWriter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 public class Stemmer {
-    public static String [] pr;
+    public static String[] pr;
     public static ArrayList<Sentence> sen;
     public static MyArrayList<Word> word;
     public static ArrayList<Paragraph> para;
 
     public static void main(String[] args) {
-        //single paragraphs
-//        String text = "সুতরাং একাদশ জাতী সংসদ নির্বাচন 13 তফসিল ঘোষণ পর মনোনয়ন ফরম বিক্রির প্রথম দিন দেশ প্রধান " +
-//                " দু যেহেতু রাজনৈতিক দল জাতী কার্যাল ভিন্ন চিত্র দেখা গেছে। উৎসবমুখর পরিবাশ মনোনয়ন ফরম বিক্রি হ আওয়ামী লীগ" +
-//                " কার্যালয়ে। কিন্তু বিএনপি কার্যাল ন কোনো নির্বাচনী তৎপরতা।";
-        //multiple paragraphs = 3
-        ActualStemmer as = new ActualStemmer();
-        String text = as.StemmedText();
-        System.out.println(text);
-//        String text = "আদালত সূত্রে জানা গেছে, ২০০৭ সালের ৬ জানুয়ারি লাকসাম উপজেলার শ্রীয়াং বাজারে দোকান বন্ধ করে ক্ষুদ্র কাঁচামাল ব্যবসায়ী উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) ও পান ব্যবসায়ী বাচ্চু মিয়া (৩৫) ভ্যানে করে বাড়ি ফিরছিলেন। রাত ১২টার দিকে লাকসামের শ্রীয়াং ও রাজাপুর সড়কের বদিরপুকুরে পৌঁছালে দণ্ডপ্রাপ্ত আসামিরা ডাকাত পরিচয় দিয়ে মাত্র এক হাজার ৪০০ টাকার জন্য সড়কের পাশে ফসলি জমিতে নিয়ে তিনজনকে গলা কেটে হত্যা করে। নিহত উত্তম দেবনাথ (২৭), পরীক্ষিত দেবনাথ (১২) মনোহরগঞ্জ উপজেলা প্রতাপপুর গ্রামের মণিন্দ্র দেবনাথের ছেলে। এ ছাড়া বাচ্চু মিয়া লাকসাম উপজেলার জগতপুর গ্রামের সামছুল হকের ছেলে। \n" +
-//
-//                "\n" +
-//                "আদালত সূত্রে আরও জানা গেছে, ওই বছরের ৭ জানুয়ারি নিহত বাচ্চুর ছোট ভাই কবির হোসেন বাদী হয়ে লাকসাম থানায় একটি হত্যা মামলা দায়ের করেন। পরবর্তীতে দীর্ঘ ১০ মাস তদন্ত শেষে লাকসাম থানা-পুলিশ পাঁচজনকে আসামি করে আদালতে একটি অভিযোগপত্র দাখিল করেন। এরপর দীর্ঘ সময় ধরে এ মামলার শুনানি হয়। বুধবার রায় দেওয়া হয়।\n" +
-//                "\n" +
-//                "এ মামলার রাষ্ট্রপক্ষের আইনজীবী ছিলেন মো. আবু তাহের এবং আসামি পক্ষের আইনজীবী ছিলেন নাঈমা সুলতানা মুন্নি। রায়ে সন্তোষ প্রকাশ করে বাদী কবির হোসেন প্রথম আলোকে বলেন, ‘আসামিদের দ্রুত গ্রেপ্তার করে সাজা কার্যকর করতে হবে। এর মাধ্যমে আইনের শাসন নিশ্চিত হলো। সব ধরনের সমঝোতা প্রস্তাব ফিরিয়ে দিয়ে ও হুমকি সহ্য করে এ রায় পেয়েছি।";
+
+        String text = ActualStemmer.StemmedText();
+//        System.out.println(text);
+
 
         //splitting sentences
         //String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
 
-        //spliting paragraphs
+        //spliting paragraphs   Rule
         pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
 
         //main arraylists
@@ -162,21 +153,19 @@ public class Stemmer {
                         }
                     }
                 }
-            }
-            else{
-                String paragraph = para.get(x-1).para; //fetching the paragraph
-                String [] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
+            } else {
+                String paragraph = para.get(x - 1).para; //fetching the paragraph
+                String[] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
                 //System.out.println(sentences[0]);
-                String [] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
-                for(int k= 0; k<sentences.length; k++)
-                {
-                    String [] words= Sentence.createWords(sentences[k]); //test sentence broken into words
-                    for(int i=0; i<para_topic.length; i++) {
-                        for(int j=0; j<words.length; j++) {
-                            if(words[j].equals(para_topic[i])) {
+                String[] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
+                for (int k = 0; k < sentences.length; k++) {
+                    String[] words = Sentence.createWords(sentences[k]); //test sentence broken into words
+                    for (int i = 0; i < para_topic.length; i++) {
+                        for (int j = 0; j < words.length; j++) {
+                            if (words[j].equals(para_topic[i])) {
                                 for (int z = 0; z < sen.size(); z++) {
-                                    if(sen.get(z).text.equals(sentences[k])) {
-                                        if(sen.get(z).paraNo == x) {
+                                    if (sen.get(z).text.equals(sentences[k])) {
+                                        if (sen.get(z).paraNo == x) {
                                             //System.out.println(sen.get(z).text);
                                             //System.out.println(words[j]);
                                             sen.get(z).topicScore++;
@@ -260,22 +249,35 @@ public class Stemmer {
         EvaluatePositionScore();
         EvaluateNumValScore();
 
+        try {
+            File file = new File(".\\output.csv");
+            FileWriter outputfile = new FileWriter(file);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] label = {"score1", "score2","score3","score4","score5","score6"};
+            writer.writeNext(label);
+//        double[][] score = new double[sen.size()][6];
+            int i = 0;
+//        DecimalFormat df2 = new DecimalFormat(".##");
+            int c = 0;
+            for (Sentence s : sen) {
+                String []data = {s.tfscore+"", s.numScore+"", s.lenScore+"", s.cueScore+"", s.topicScore+"", s.posScore+""};
+                writer.writeNext(data);
 
-        double[][] score = new double[sen.size()][6];
-        int i = 0;
-        DecimalFormat df2 = new DecimalFormat(".##");
-        for (Sentence s : sen) {
-            score[i][0] = s.tfscore;
-            score[i][1] = s.numScore;
-            score[i][2] = s.lenScore;
-            score[i][3] = s.cueScore;
-            score[i][4] = s.topicScore;
-            score[i++][5] = s.posScore;
+//            score[i][0] = s.tfscore;
+//            score[i][1] = s.numScore;
+//            score[i][2] = s.lenScore;
+//            score[i][3] = s.cueScore;
+//            score[i][4] = s.topicScore;
+//            score[i++][5] = s.posScore;
+            }
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        for (Sentence s : sen) {
-//            System.out.println(s.text);
-            System.out.println(df2.format(s.tfscore) + "     " + df2.format(s.posScore) + "      " + df2.format(s.lenScore)
-                    + "      " + df2.format(s.cueScore) + "      " + df2.format(s.numScore) + "      " + df2.format(s.topicScore));
-        }
+//        for (Sentence s : sen) {
+////            System.out.println(s.text);
+//            System.out.println(df2.format(s.tfscore) + "     " + df2.format(s.posScore) + "      " + df2.format(s.lenScore)
+//                    + "      " + df2.format(s.cueScore) + "      " + df2.format(s.numScore) + "      " + df2.format(s.topicScore));
+//        }
     }
 }
