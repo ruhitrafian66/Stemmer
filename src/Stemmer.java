@@ -120,6 +120,7 @@ public class Stemmer {
 
         for (int c = 0; c < sen.size(); c++) {
             ///avgLength += sen.get(c).len;
+            System.out.println(c+" "+sen.get(c).text);
         }
 
         while (sc.hasNextLine()) {
@@ -273,7 +274,7 @@ public class Stemmer {
             score[i++][5] = s.posScore;
         }
         for (Sentence s : sen) {
-//            System.out.println(s.text);
+            System.out.println(s.text);
             System.out.println(df2.format(s.tfscore) + "     " + df2.format(s.posScore) + "      " + df2.format(s.lenScore)
                     + "      " + df2.format(s.cueScore) + "      " + df2.format(s.numScore) + "      " + df2.format(s.topicScore));
         }
