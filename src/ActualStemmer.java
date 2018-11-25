@@ -12,6 +12,7 @@ public class ActualStemmer {
         File inputFile = null;
         RuleFileParser parser = null;
         try {
+
              stopFile = new File("stopwords.txt");
              parser = new RuleFileParser("stem.rules");
              inputFile = new File("input.txt");
@@ -37,15 +38,19 @@ public class ActualStemmer {
                      new BufferedReader(new FileReader(inputFile))) {
 
             String line;
-            String ret = "";
+
+            StringBuilder sb = new StringBuilder();
             while ((line = inputFileReader.readLine()) != null) {
+                String ret = "";
                 for (String word : line.split("[\\s%,ঃ]+")) {
                     if (!(stop.contains(word))) {
                         ret += parser.stemOfWord(word) + " ";
                     }
                 }
-                return ret;
+                sb.append(ret);
             }
+
+            return sb.toString();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
