@@ -3,6 +3,7 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,8 +16,6 @@ public class Stemmer {
     public static void main(String[] args) {
 
         String text = ActualStemmer.StemmedText();
-//        System.out.println(text);
-
 
         //splitting sentences
         //String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
@@ -49,7 +48,8 @@ public class Stemmer {
                 }
             }
         }
-        Finalize();
+        Rebuilder r = new Rebuilder();
+        r.Build( Finalize());
     }
 
     public static void printTest() {
@@ -183,16 +183,12 @@ public class Stemmer {
                 }
 
             }
+            for(Sentence s: sen){
+                s.topicScore = s.topicScore/s.len;
+            }
+        }
 
-        }
-        String sc = sen.get(1).text;
-        String[] wor = Sentence.createWords(sc);
-        for (int c = 0; c < wor.length; c++) {
-            ///avgLength += sen.get(c).len;
-        }
-        for (int c = 0; c < sen.size(); c++) {
-            ///avgLength += sen.get(c).len;
-        }
+
     }
 
     public static void EvaluateNumValScore() {
@@ -240,7 +236,7 @@ public class Stemmer {
     }
 
     //double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
-    public static void Finalize() {
+    public static double[][] Finalize() {
         //
         EvaluateTFIDF();
         EvaluateLengthScore();
@@ -255,29 +251,32 @@ public class Stemmer {
             CSVWriter writer = new CSVWriter(outputfile);
             String[] label = {"score1", "score2","score3","score4","score5","score6"};
             writer.writeNext(label);
-//        double[][] score = new double[sen.size()][6];
+        double[][] score = new double[sen.size()][6];
             int i = 0;
-//        DecimalFormat df2 = new DecimalFormat(".##");
+        DecimalFormat df2 = new DecimalFormat("#.####");
             int c = 0;
             for (Sentence s : sen) {
-                String []data = {s.tfscore+"", s.numScore+"", s.lenScore+"", s.cueScore+"", s.topicScore+"", s.posScore+""};
+                String []data = {df2.format(s.tfscore)+"", df2.format(s.numScore)+"", s.lenScore+"", s.cueScore+"", df2.format(s.topicScore)+"", s.posScore+""};
                 writer.writeNext(data);
-
-//            score[i][0] = s.tfscore;
-//            score[i][1] = s.numScore;
-//            score[i][2] = s.lenScore;
-//            score[i][3] = s.cueScore;
-//            score[i][4] = s.topicScore;
-//            score[i++][5] = s.posScore;
+            score[i][0] = s.tfscore;
+            score[i][1] = s.numScore;
+            score[i][2] = s.lenScore;
+            score[i][3] = s.cueScore;
+            score[i][4] = s.topicScore;
+            score[i++][5] = s.posScore;
             }
             writer.close();
+            return score;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
 //        for (Sentence s : sen) {
 ////            System.out.println(s.text);
 //            System.out.println(df2.format(s.tfscore) + "     " + df2.format(s.posScore) + "      " + df2.format(s.lenScore)
 //                    + "      " + df2.format(s.cueScore) + "      " + df2.format(s.numScore) + "      " + df2.format(s.topicScore));
 //        }
     }
+
+
 }
