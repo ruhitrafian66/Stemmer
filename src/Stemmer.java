@@ -57,6 +57,7 @@ public class Stemmer {
             BufferedReader br = new BufferedReader(new FileReader("clusters.csv"));
             String line;
             int iteration =0;
+            int clusterSelect=1;
             while ((line= br.readLine())!=null){
                 if (iteration==0) {
                     iteration++;
@@ -66,8 +67,17 @@ public class Stemmer {
                     if(cols[0].equals("")){
                         break;
                     }
-                    else {
-                        int temp= Integer.parseInt(cols[1]);
+                    else{
+                        if (iteration==1)
+                        {
+                            if(Integer.parseInt(cols[0]) == 0) {
+                                clusterSelect=0;
+                            }
+                            else{
+                                clusterSelect=1;
+                            }
+                        }
+                        int temp= Integer.parseInt(cols[clusterSelect]);
                         System.out.println(sen.get(temp).text + "। ");
                     }
                 }
