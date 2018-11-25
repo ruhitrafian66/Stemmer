@@ -12,9 +12,10 @@ public class ActualStemmer {
         File inputFile = null;
         RuleFileParser parser = null;
         try {
-             stopFile = new File(".\\stopwords.txt");
-             parser = new RuleFileParser(".\\stem.rules");
-             inputFile = new File(".\\input.txt");
+
+             stopFile = new File("stopwords.txt");
+             parser = new RuleFileParser("stem.rules");
+             inputFile = new File("input.txt");
         }catch(Exception e){
             e.printStackTrace();
         }

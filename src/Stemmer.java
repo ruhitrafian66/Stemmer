@@ -111,6 +111,7 @@ public class Stemmer {
 
         for (int c = 0; c < sen.size(); c++) {
             ///avgLength += sen.get(c).len;
+            System.out.println(c+" "+sen.get(c).text);
         }
 
         while (sc.hasNextLine()) {
@@ -263,6 +264,7 @@ public class Stemmer {
                 String []data = {s.tfscore+"", s.numScore+"", s.lenScore+"", s.cueScore+"", s.topicScore+"", s.posScore+""};
                 writer.writeNext(data);
 
+
 //            score[i][0] = s.tfscore;
 //            score[i][1] = s.numScore;
 //            score[i][2] = s.lenScore;
@@ -273,6 +275,7 @@ public class Stemmer {
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
+
         }
 //        for (Sentence s : sen) {
 ////            System.out.println(s.text);
