@@ -52,11 +52,7 @@ public class Stemmer {
         r.Build( Finalize());
     }
 
-    public static void printTest() {
-        for (Sentence s : sen) {
-            System.out.println();
-        }
-    }
+
 
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
@@ -108,11 +104,6 @@ public class Stemmer {
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
         }
-
-        for (int c = 0; c < sen.size(); c++) {
-            ///avgLength += sen.get(c).len;
-        }
-
         while (sc.hasNextLine()) {
             String cue = sc.nextLine();
             for (int c = 0; c < sen.size(); c++) {
@@ -193,6 +184,7 @@ public class Stemmer {
 
     public static void EvaluateNumValScore() {
         CharSequence[] ch = new CharSequence[10];
+        //"0, ১, ২, ৩, ৪, ৫, ৬, ৭, ৮, ৯"
         ch[0] = new StringBuffer("0");
         ch[1] = new StringBuffer("১");
         ch[2] = new StringBuffer("২");
@@ -231,9 +223,6 @@ public class Stemmer {
         }
     }
 
-    public static void evaluate() {
-
-    }
 
     //double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
     public static double[][] Finalize() {

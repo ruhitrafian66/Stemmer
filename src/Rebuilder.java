@@ -19,7 +19,7 @@ public class Rebuilder {
 //            for(Score s: aggScore){
 //                System.out.print(s.toString()+", ");
 //            }
-            int toPrint = (int)Math.floor(aggScore.length/3);
+            int toPrint = (int)Math.ceil(aggScore.length/3)+1;
             int [] printIndex = new int[toPrint];
             for(int c= 0; c<printIndex.length;c++){
                 printIndex[c] = aggScore[c].index;
