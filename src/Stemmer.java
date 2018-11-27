@@ -1,5 +1,6 @@
 import com.opencsv.CSVWriter;
-import java.io.File;
+import java.io.*;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
@@ -49,45 +50,40 @@ public class Stemmer {
             }
         }
         Rebuilder r = new Rebuilder();
-        r.Build( Finalize());
+        r.Build(Finalize());
         printSummary();
     }
-    public static void printSummary(){
+    public static void printSummary() {
         try {
             Scanner sc = new Scanner(new File("clusters.csv"));
             BufferedReader br = new BufferedReader(new FileReader("clusters.csv"));
             String line;
-            int iteration =0;
-            int clusterSelect=1;
-            while ((line= br.readLine())!=null){
-                if (iteration==0) {
+            int iteration = 0;
+            int clusterSelect = 1;
+            while ((line = br.readLine()) != null) {
+                if (iteration == 0) {
                     iteration++;
-                }
-                else {
+                } else {
                     String[] cols = line.split(",");
-                    if(cols[0].equals("")){
+                    if (cols[0].equals("")) {
                         break;
-                    }
-                    else{
-                        if (iteration==1)
-                        {
-                            if(Integer.parseInt(cols[0]) == 0) {
-                                clusterSelect=0;
-                            }
-                            else{
-                                clusterSelect=1;
+                    } else {
+                        if (iteration == 1) {
+                            if (Integer.parseInt(cols[0]) == 0) {
+                                clusterSelect = 0;
+                            } else {
+                                clusterSelect = 1;
                             }
                         }
-                        int temp= Integer.parseInt(cols[clusterSelect]);
+                        int temp = Integer.parseInt(cols[clusterSelect]);
                         System.out.println(sen.get(temp).text + "। ");
                     }
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
@@ -131,7 +127,7 @@ public class Stemmer {
         }
     }
 
-    public static void EvaluateCueScore() {
+    public static void EvaluateCueScore(){
         File cue_words = new File("cue_words.txt");
         Scanner sc = null;
         try {
