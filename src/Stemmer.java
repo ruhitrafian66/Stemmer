@@ -1,5 +1,4 @@
 import com.opencsv.CSVWriter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -31,6 +30,7 @@ public class Stemmer {
         //tokenize, create and populate arraylists
 
         int senNoDoc = 0;
+
         for (int i = 0; i < pr.length; ++i) {
             //splitting sentences
             String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
@@ -50,9 +50,44 @@ public class Stemmer {
         }
         Rebuilder r = new Rebuilder();
         r.Build( Finalize());
+        printSummary();
     }
-
-
+    public static void printSummary(){
+        try {
+            Scanner sc = new Scanner(new File("clusters.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("clusters.csv"));
+            String line;
+            int iteration =0;
+            int clusterSelect=1;
+            while ((line= br.readLine())!=null){
+                if (iteration==0) {
+                    iteration++;
+                }
+                else {
+                    String[] cols = line.split(",");
+                    if(cols[0].equals("")){
+                        break;
+                    }
+                    else{
+                        if (iteration==1)
+                        {
+                            if(Integer.parseInt(cols[0]) == 0) {
+                                clusterSelect=0;
+                            }
+                            else{
+                                clusterSelect=1;
+                            }
+                        }
+                        int temp= Integer.parseInt(cols[clusterSelect]);
+                        System.out.println(sen.get(temp).text + "। ");
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
@@ -110,26 +145,17 @@ public class Stemmer {
                 String[] temp = sen.get(c).text.split(" ");
                 for (int i = 0; i < temp.length; i++) {
                     if (temp[i].equals(cue)) {
-
-//                        System.out.println(c + " " + cue);
-
                         sen.get(c).cueScore++;
                     }
                 }
             }
         }
-
-//        for (int c = 0; c < sen.size(); c++) {
-//            System.out.println("cue score" + sen.get(c).cueScore);
-//            ///avgLength += sen.get(c).len;
-//        }
-
-
     }
 
     public static void EvaluateTopicSentenceScore() {
         for (int x = 1; x <= pr.length; x++) {
             if (x == 1) {
+                System.out.println(para.get(0).para);
                 String[] passage_topic = sen.get(0).text.split(" ");
                 for (int y = 0; y < passage_topic.length; y++) {
                     for (int c = 0; c < sen.size(); c++) {
@@ -137,7 +163,6 @@ public class Stemmer {
                         String[] temp = Sentence.createWords(sc);
                         for (int i = 0; i < temp.length; i++) {
                             if (temp[i].equals(passage_topic[y])) {
-
                                 sen.get(c).topicScore++;
                                 //System.out.println("topic score for the very first line" + " " + sen.get(c).pos+" "+ sen.get(c).topicScore);
                             }
@@ -147,7 +172,7 @@ public class Stemmer {
             } else {
                 String paragraph = para.get(x - 1).para; //fetching the paragraph
                 String[] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
-                //System.out.println(sentences[0]);
+                System.out.println(sentences[0]);
                 String[] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
                 for (int k = 0; k < sentences.length; k++) {
                     String[] words = Sentence.createWords(sentences[k]); //test sentence broken into words
@@ -164,15 +189,10 @@ public class Stemmer {
                                         }
                                     }
                                 }
-                                //Sentence temp= MyArrayList.getSentence(sentences[k]);
-                                //temp.topicScore++;
-
                             }
                         }
                     }
-
                 }
-
             }
             for(Sentence s: sen){
                 s.topicScore = s.topicScore/s.len;
