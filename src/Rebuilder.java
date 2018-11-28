@@ -16,10 +16,10 @@ public class Rebuilder {
                 aggScore[i] = new Score(i,temp);
             }
             Arrays.sort(aggScore);
-//            for(Score s: aggScore){
+            for(Score s: aggScore){
 //                System.out.print(s.toString()+", ");
-//            }
-            int toPrint = (int)Math.ceil(aggScore.length/3)+1;
+            }
+            int toPrint = (int)Math.ceil(aggScore.length/3);
             int [] printIndex = new int[toPrint];
             for(int c= 0; c<printIndex.length;c++){
                 printIndex[c] = aggScore[c].index;
@@ -27,7 +27,8 @@ public class Rebuilder {
             Arrays.sort(printIndex);
             String[] text = readText().split("।");
             for(int c = 0; c<printIndex.length; c++){
-                System.out.println(text[printIndex[c]]);
+//                System.out.print(printIndex[c]);
+//                System.out.println(text[printIndex[c]]);
             }
 
         } catch (Exception e) {
@@ -61,9 +62,9 @@ class Score implements Comparable<Score> {
     public int compareTo(Score o) {
         if (o.score < this.score) {
             return -1;
-        } else {
+        } else if(o.score>this.score){
             return +1;
-        }
+        }else return 0;
     }
     public String toString(){
         return score+"";
