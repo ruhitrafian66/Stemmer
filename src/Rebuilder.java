@@ -36,9 +36,11 @@ public class Rebuilder {
             String output = "";
             for(int c = 0; c<printIndex.length; c++){
 //                System.out.println(printIndex[c]+"  "+text[printIndex[c]]);
-                output += text[printIndex[c]];
+
+                output += text[printIndex[c]]+"। ";
             }
             writer.write(output);
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,12 +77,14 @@ public class Rebuilder {
                         }
                     }
                     int temp = Integer.parseInt(cols[clusterSelect]);
+
 //                    System.out.println(temp+"  "+text[temp]);
 //                    System.out.println(text[temp]);
-                    ret+=text[temp];
+                    ret+=text[temp]+"।";
                 }
             }
             writer.write(ret);
+            writer.close();;
         } catch (Exception e) {
             e.printStackTrace();
         }
