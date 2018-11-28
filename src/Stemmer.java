@@ -1,11 +1,11 @@
 import com.opencsv.CSVWriter;
-import java.io.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Stemmer {
@@ -45,7 +45,6 @@ public class Stemmer {
                                 word.iterate(w[k]);
                             }
                         }
-
                     }
                 }
             }
@@ -55,13 +54,37 @@ public class Stemmer {
 //            System.out.print(se.pos + " /" + se.truePos + ": " + se.toString());
 //            System.out.println();
 //        }
+
         Rebuilder r = new Rebuilder();
         r.AggregateOutput(Finalize());
 //        r.FCMOutput();
-
     }
 
-    public static void EvaluateTFIDF() {
+    public static void StemCue(){
+        try{
+            RuleFileParser r = new RuleFileParser("stem.rules");
+            File cueFile = new File("cue_words.txt");
+            Scanner k = new Scanner (cueFile);
+            FileWriter writer = new FileWriter(new File("StemmedCueWords.txt"));
+            LinkedList<String> cueList= new LinkedList<>();
+            while(k.hasNextLine()){
+                cueList.add(k.nextLine());
+            }
+            for(String s: cueList){
+//                System.out.print(s+"   ");
+                String temp = r.stemOfWord(s);
+//                System.out.println(temp);
+                writer.write(temp+"\r\n");
+            }
+            writer.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void EvaluateTFIDF()
+
+    {
         double maxIDF = 0;
         int cnt = 1;
         for (Sentence s : sen) {
@@ -104,34 +127,32 @@ public class Stemmer {
     }
 
     public static void EvaluateCueScore(){
-        File cue_words = new File("cue_words.txt");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(cue_words);
-        } catch (FileNotFoundException e) {
-            System.out.println("file not found");
-        }
-        while (sc.hasNextLine()) {
-            String cue = sc.nextLine();
-            for (int c = 0; c < sen.size(); c++) {
-                String[] temp = sen.get(c).text.split(" ");
-                for (int i = 0; i < temp.length; i++) {
-                    if (temp[i].equals(cue)) {
-                        sen.get(c).cueScore++;
+        try{
+            Scanner k = new Scanner(new File("cue_words.txt"));
+            LinkedList<String> cueList = new LinkedList<>();
+            while(k.hasNextLine()){
+                cueList.add(k.nextLine().trim());
+            }
+            for(Sentence s:sen){
+                String []word = s.text.split(" ");
+                for(String w: word){
+                    if(cueList.contains(w)){
+                        s.cueScore++;
                     }
                 }
             }
-        }
-        double maxScore = 0;
-        for (Sentence s : sen) {
-            if (s.cueScore > maxScore) {
-                maxScore = s.cueScore;
+            double maxScore = 0;
+            for (Sentence s : sen) {
+                if (s.cueScore > maxScore) {
+                    maxScore = s.cueScore;
+                }
             }
+            for (Sentence s : sen) {
+                s.cueScore = s.cueScore / maxScore;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        for (Sentence s : sen) {
-            s.cueScore = s.cueScore / maxScore;
-        }
-
     }
 
     public static void EvaluateTopicSentenceScore() {
