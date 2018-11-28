@@ -11,18 +11,18 @@ public class Sentence {
     int lenScore;
     double numScore;
     double topicScore;
-    int posScore;
-    int cueScore;
+    double posScore = 0;
+    double cueScore;
     int paraNo;
-    int senNoDoc;
+    int truePos;
 
-    public Sentence(int p, String st, boolean t, int l,int  paraNo, int senNoDoc){
+    public Sentence(int p, String st, boolean t, int l,int  paraNo, int truePos){
         pos = p;
         text = st;
         ts = t;
         len = l;
         this.paraNo = paraNo;
-        this.senNoDoc = senNoDoc;
+        this.truePos = truePos;
         String[] words = createWords(st);
     }
     public static String[] createWords(String s) {

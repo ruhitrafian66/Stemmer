@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Stemmer {
@@ -17,72 +18,45 @@ public class Stemmer {
 
         String text = ActualStemmer.StemmedText();
 
-        //splitting sentences
-        //String[] st = text.replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
-
-        //spliting paragraphs   Rule
-        pr = text.replaceAll("(\r\n|\r|\n)+", "\n").split("\n");
-
-        //main arraylists
         sen = new ArrayList<>();
         word = new MyArrayList<>();
         para = new ArrayList<>();
 
         //tokenize, create and populate arraylists
-
-        int senNoDoc = 0;
-
-        for (int i = 0; i < pr.length; ++i) {
-            //splitting sentences
-            String[] st = pr[i].replaceAll("(\r\n|\r|\n)+", "").split("।"); //modified for multiple paras
-            para.add(new Paragraph(st, i + 1, pr[i]));
-            for (int c = 0; c < st.length; c++) {
-                String[] w = st[c].split(" ");
-                sen.add(new Sentence(c, st[c], false, w.length, i + 1, senNoDoc));
-                ++senNoDoc;
-                for (int c1 = 0; c1 < w.length; c1++) {
-                    if (!(word.contains(w[c1]))) {
-                        word.add(new Word(c, w[c1]));
-                    } else {
-                        word.iterate(w[c1]);
-                    }
-                }
-            }
-        }
-        Rebuilder r = new Rebuilder();
-        r.Build(Finalize());
-        //printSummary();
-    }
-    public static void printSummary() {
-        try {
-            Scanner sc = new Scanner(new File("clusters.csv"));
-            BufferedReader br = new BufferedReader(new FileReader("clusters.csv"));
-            String line;
-            int iteration = 0;
-            int clusterSelect = 1;
-            while ((line = br.readLine()) != null) {
-                if (iteration == 0) {
-                    iteration++;
-                } else {
-                    String[] cols = line.split(",");
-                    if (cols[0].equals("")) {
-                        break;
-                    } else {
-                        if (iteration == 1) {
-                            if (Integer.parseInt(cols[0]) == 0) {
-                                clusterSelect = 0;
+        String[] p = text.split("\n");
+        int totalPos = 0;
+        for (int i = 0; i < p.length; i++) {
+            if (!p[i].equals(null)) {
+                String[] s = p[i].split("।");
+                para.add(new Paragraph(i, s.length, p[i]));
+                for (int j = 0; j < s.length; j++) {
+                    if (!(s[j].equals(" "))) {
+                        boolean tsFlag = false;
+                        if (j == 0) {
+                            tsFlag = true;
+                        }
+                        String[] w = s[j].split(" ");
+                        sen.add(new Sentence(j, s[j], tsFlag, w.length, i + 1, totalPos));
+                        totalPos++;
+                        for (int k = 0; k < w.length; k++) {
+                            if (!(word.contains(w[k]))) {
+                                word.add(new Word(i, w[k]));
                             } else {
-                                clusterSelect = 1;
+                                word.iterate(w[k]);
                             }
                         }
-                        int temp = Integer.parseInt(cols[clusterSelect]);
-                        System.out.println(sen.get(temp).text + "। ");
+
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+//        for (int c = 0; c < sen.size(); c++) {
+//            Sentence se = sen.get(c);
+//            System.out.print(se.pos + " /" + se.truePos + ": " + se.toString());
+//            System.out.println();
+//        }
+        Rebuilder r = new Rebuilder();
+        r.Build(Finalize());
     }
 
     public static void EvaluateTFIDF() {
@@ -146,56 +120,44 @@ public class Stemmer {
                 }
             }
         }
+        double maxScore = 0;
+        for (Sentence s : sen) {
+            if (s.cueScore > maxScore) {
+                maxScore = s.cueScore;
+            }
+        }
+        for (Sentence s : sen) {
+            s.cueScore = s.cueScore / maxScore;
+        }
+
     }
 
     public static void EvaluateTopicSentenceScore() {
-        for (int x = 1; x <= pr.length; x++) {
-            if (x == 1) {
-                System.out.println("para paise" +para.get(0).para);
-                String[] passage_topic = sen.get(0).text.split(" ");
-                for (int y = 0; y < passage_topic.length; y++) {
-                    for (int c = 0; c < sen.size(); c++) {
-                        String sc = sen.get(c).text;
-                        String[] temp = Sentence.createWords(sc);
-                        for (int i = 0; i < temp.length; i++) {
-                            if (temp[i].equals(passage_topic[y])) {
-                                sen.get(c).topicScore++;
-                                System.out.println("topic score for the very first line" + " " + sen.get(c).pos+" "+ sen.get(c).topicScore);
-                            }
-                        }
-                    }
-                }
-            } else {
-                String paragraph = para.get(x - 1).para; //fetching the paragraph
-                System.out.println("abar para paise" +para.get(x-1).para);
-                String[] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
-                String[] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
-                for (int k = 0; k < sentences.length; k++) {
-                    String[] words = Sentence.createWords(sentences[k]); //test sentence broken into words
-                    for (int i = 0; i < para_topic.length; i++) {
-                        for (int j = 0; j < words.length; j++) {
-                            if (words[j].equals(para_topic[i])) {
-                                for (int z = 0; z < sen.size(); z++) {
-                                    if (sen.get(z).text.equals(sentences[k])) {
-                                        if (sen.get(z).paraNo == x) {
-                                            //System.out.println(sen.get(z).text);
-                                            //System.out.println(words[j]);
-                                            sen.get(z).topicScore++;
-                                            System.out.println("Topic score updated: " + sen.get(z).senNoDoc + " " + sen.get(z).topicScore);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        ArrayList<String> tsWords = new ArrayList<>();
+        for (Sentence s : sen) {
+            if (s.ts) {
+                String[] temp = s.text.split(" ");
+                tsWords.addAll(Arrays.asList(temp));
+            }
+        }
+        for (Sentence s : sen) {
+            String[] temp = s.text.split(" ");
+            for (String t : temp) {
+                if (tsWords.contains(t)) {
+                    s.topicScore++;
+
                 }
             }
-            //for(Sentence s: sen){
-             //   s.topicScore = s.topicScore/s.len;
-            //}
         }
-
-
+        double max = 0;
+        for (Sentence s : sen) {
+            if (s.topicScore > max) {
+                max = s.topicScore;
+            }
+        }
+        for (Sentence s : sen) {
+            s.topicScore = s.topicScore / max;
+        }
     }
 
     public static void EvaluateNumValScore() {
@@ -227,20 +189,26 @@ public class Stemmer {
 
     public static void EvaluatePositionScore() {
         for (Paragraph pr : para) {
-            for (Sentence sc : sen) {
-                if (sc.paraNo == pr.paraNo && sc.pos <= Math.ceil(0.1 * pr.noOfSentences)) {
-                    sc.posScore += 1;
-                } else if (sc.paraNo == pr.paraNo && sc.pos >= Math.floor(0.9 * pr.noOfSentences)) {
-                    sc.posScore += 1;
-                } else if (sc.paraNo == pr.paraNo) {
-                    sc.posScore += 0;
-                }
-            }
+
         }
     }
 
+//        public static void EvaluatePositionScore () {
+//            for (Paragraph pr : para) {
+//                for (Sentence sc : sen) {
+//                    if (sc.paraNo == pr.paraNo && sc.pos <= Math.ceil(0.1 * pr.noOfSentences)) {
+//                        sc.posScore += 1;
+//                    } else if (sc.paraNo == pr.paraNo && sc.pos >= Math.floor(0.9 * pr.noOfSentences)) {
+//                        sc.posScore += 1;
+//                    } else if (sc.paraNo == pr.paraNo) {
+//                        sc.posScore += 0;
+//                    }
+//                }
+//            }
+//        }
 
-    //double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
+
+    //    double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
     public static double[][] Finalize() {
         //
         EvaluateTFIDF();
@@ -249,19 +217,35 @@ public class Stemmer {
         EvaluateTopicSentenceScore();
         EvaluatePositionScore();
         EvaluateNumValScore();
-
         try {
             File file = new File(".\\output.csv");
             FileWriter outputfile = new FileWriter(file);
             CSVWriter writer = new CSVWriter(outputfile);
-            String[] label = {"score1", "score2","score3","score4","score5","score6"};
+            String[] label = {"score1", "score2", "score3", "score4", "score5", "score6"};
             writer.writeNext(label);
             double[][] score = new double[sen.size()][6];
+            //this array is initiated for output only, optimize it if possible
+            double[][] outputScore = new double[sen.size()][6];
             int i = 0;
+            int j = 0;
             DecimalFormat df2 = new DecimalFormat("#.####");
             int c = 0;
             for (Sentence s : sen) {
-                String []data = {df2.format(s.tfscore)+"", df2.format(s.numScore)+"", s.lenScore+"", s.cueScore+"", df2.format(s.topicScore)+"", s.posScore+""};
+                outputScore[j][0] = s.tfscore;
+                outputScore[j][1] = s.numScore;
+                outputScore[j][2] = s.lenScore;
+                outputScore[j][3] = s.cueScore;
+                outputScore[j][4] = s.topicScore;
+                outputScore[j][5] = s.posScore;
+                for (int x=0; x<6; x++) {
+                    Double q = outputScore[j][x];
+                    //System.out.println(q);
+                    if(q.equals(Double.NaN)) {
+                        outputScore[j][x]=0;
+                    }
+                }
+                String []data = {df2.format(outputScore[j][0])+"", df2.format(outputScore[j][1])+"", outputScore[j][2]+"", outputScore[j][3]+"", df2.format(outputScore[j][4])+"", outputScore[j][5]+""};
+
                 writer.writeNext(data);
                 score[i][0] = s.tfscore;
                 score[i][1] = s.numScore;
@@ -269,6 +253,8 @@ public class Stemmer {
                 score[i][3] = s.cueScore;
                 score[i][4] = s.topicScore;
                 score[i++][5] = s.posScore;
+                j++;
+
             }
             writer.close();
             return score;
