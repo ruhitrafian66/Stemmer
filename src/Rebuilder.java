@@ -61,9 +61,9 @@ class Score implements Comparable<Score> {
     public int compareTo(Score o) {
         if (o.score < this.score) {
             return -1;
-        } else {
+        } else if(o.score>this.score){
             return +1;
-        }
+        }else return 0;
     }
     public String toString(){
         return score+"";

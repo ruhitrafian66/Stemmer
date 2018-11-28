@@ -49,7 +49,7 @@ public class ActualStemmer {
                 }
                 ret += "\n";
             }
-            System.out.println(ret);
+            //System.out.println(ret);
             return ret;
 
         } catch (Exception exception) {

@@ -51,7 +51,7 @@ public class Stemmer {
         }
         Rebuilder r = new Rebuilder();
         r.Build(Finalize());
-        printSummary();
+        //printSummary();
     }
     public static void printSummary() {
         try {
@@ -151,7 +151,7 @@ public class Stemmer {
     public static void EvaluateTopicSentenceScore() {
         for (int x = 1; x <= pr.length; x++) {
             if (x == 1) {
-                System.out.println(para.get(0).para);
+                System.out.println("para paise" +para.get(0).para);
                 String[] passage_topic = sen.get(0).text.split(" ");
                 for (int y = 0; y < passage_topic.length; y++) {
                     for (int c = 0; c < sen.size(); c++) {
@@ -160,15 +160,15 @@ public class Stemmer {
                         for (int i = 0; i < temp.length; i++) {
                             if (temp[i].equals(passage_topic[y])) {
                                 sen.get(c).topicScore++;
-                                //System.out.println("topic score for the very first line" + " " + sen.get(c).pos+" "+ sen.get(c).topicScore);
+                                System.out.println("topic score for the very first line" + " " + sen.get(c).pos+" "+ sen.get(c).topicScore);
                             }
                         }
                     }
                 }
             } else {
                 String paragraph = para.get(x - 1).para; //fetching the paragraph
+                System.out.println("abar para paise" +para.get(x-1).para);
                 String[] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
-                System.out.println(sentences[0]);
                 String[] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
                 for (int k = 0; k < sentences.length; k++) {
                     String[] words = Sentence.createWords(sentences[k]); //test sentence broken into words
@@ -181,7 +181,7 @@ public class Stemmer {
                                             //System.out.println(sen.get(z).text);
                                             //System.out.println(words[j]);
                                             sen.get(z).topicScore++;
-                                            //System.out.println("Topic score updated: " + sen.get(z).senNoDoc + " " + sen.get(z).topicScore);
+                                            System.out.println("Topic score updated: " + sen.get(z).senNoDoc + " " + sen.get(z).topicScore);
                                         }
                                     }
                                 }
@@ -190,9 +190,9 @@ public class Stemmer {
                     }
                 }
             }
-            for(Sentence s: sen){
-                s.topicScore = s.topicScore/s.len;
-            }
+            //for(Sentence s: sen){
+             //   s.topicScore = s.topicScore/s.len;
+            //}
         }
 
 
@@ -201,7 +201,7 @@ public class Stemmer {
     public static void EvaluateNumValScore() {
         CharSequence[] ch = new CharSequence[10];
         //"0, ১, ২, ৩, ৪, ৫, ৬, ৭, ৮, ৯"
-        ch[0] = new StringBuffer("0");
+        ch[0] = new StringBuffer("০");
         ch[1] = new StringBuffer("১");
         ch[2] = new StringBuffer("২");
         ch[3] = new StringBuffer("৩");
@@ -256,19 +256,19 @@ public class Stemmer {
             CSVWriter writer = new CSVWriter(outputfile);
             String[] label = {"score1", "score2","score3","score4","score5","score6"};
             writer.writeNext(label);
-        double[][] score = new double[sen.size()][6];
+            double[][] score = new double[sen.size()][6];
             int i = 0;
-        DecimalFormat df2 = new DecimalFormat("#.####");
+            DecimalFormat df2 = new DecimalFormat("#.####");
             int c = 0;
             for (Sentence s : sen) {
                 String []data = {df2.format(s.tfscore)+"", df2.format(s.numScore)+"", s.lenScore+"", s.cueScore+"", df2.format(s.topicScore)+"", s.posScore+""};
                 writer.writeNext(data);
-            score[i][0] = s.tfscore;
-            score[i][1] = s.numScore;
-            score[i][2] = s.lenScore;
-            score[i][3] = s.cueScore;
-            score[i][4] = s.topicScore;
-            score[i++][5] = s.posScore;
+                score[i][0] = s.tfscore;
+                score[i][1] = s.numScore;
+                score[i][2] = s.lenScore;
+                score[i][3] = s.cueScore;
+                score[i][4] = s.topicScore;
+                score[i++][5] = s.posScore;
             }
             writer.close();
             return score;
