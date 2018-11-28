@@ -10,7 +10,7 @@ public class Sentence {
     double tfscore;
     int lenScore;
     double numScore;
-    int topicScore;
+    double topicScore;
     int posScore;
     int cueScore;
     int paraNo;

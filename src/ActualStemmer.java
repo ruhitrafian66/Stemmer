@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class ActualStemmer {
@@ -12,10 +14,11 @@ public class ActualStemmer {
         File inputFile = null;
         RuleFileParser parser = null;
         try {
-             stopFile = new File(".\\stopwords.txt");
-             parser = new RuleFileParser(".\\stem.rules");
-             inputFile = new File(".\\input.txt");
-        }catch(Exception e){
+
+            stopFile = new File("stopwords.txt");
+            parser = new RuleFileParser("stem.rules");
+            inputFile = new File("input.txt");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -32,25 +35,24 @@ public class ActualStemmer {
             System.out.println("File not found, please check filepaths");
         }
 
+
         //stemming and stopword removal
         try (BufferedReader inputFileReader =
                      new BufferedReader(new FileReader(inputFile))) {
-
-            String line;
-
-            StringBuilder sb = new StringBuilder();
+            String line = "";
+            String ret = "";
             while ((line = inputFileReader.readLine()) != null) {
-                String ret = "";
-                for (String word : line.split("[\\s%,ঃ]+")) {
-                    if (!(stop.contains(word))) {
+                for (String word : line.split(" ")) {
+                    if (!stop.contains(word)) {
                         ret += parser.stemOfWord(word) + " ";
                     }
                 }
-                sb.append(ret);
+                ret += "\n";
             }
+            //System.out.println(ret);
+            return ret;
 
-            return sb.toString();
-        } catch (IOException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return null;
