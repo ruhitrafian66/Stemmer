@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Stemmer {
@@ -50,17 +51,39 @@ public class Stemmer {
                 }
             }
         }
-//        for (int c = 0; c < sen.size(); c++) {
-//            Sentence se = sen.get(c);
-//            System.out.print(se.pos + " /" + se.truePos + ": " + se.toString());
-//            System.out.println();
-//        }
+        for (int c = 0; c < sen.size(); c++) {
+            Sentence se = sen.get(c);
+            System.out.print(se.pos + " /" + se.truePos + ": " + se.toString());
+            System.out.println();
+        }
         Rebuilder r = new Rebuilder();
         r.AggregateOutput(Finalize());
-//        r.FCMOutput();
+        r.FCMOutput();
+//        StemCue();
 
     }
 
+//    public static void StemCue(){
+//        try{
+//            RuleFileParser r = new RuleFileParser("stem.rules");
+//            File cueFile = new File("cue_words.txt");
+//            Scanner k = new Scanner (cueFile);
+//            FileWriter writer = new FileWriter(new File("StemmedCueWords.txt"));
+//            LinkedList<String> cueList= new LinkedList<>();
+//            while(k.hasNextLine()){
+//                cueList.add(k.nextLine());
+//            }
+//            for(String s: cueList){
+//                System.out.print(s+"   ");
+//                String temp = r.stemOfWord(s);
+//                System.out.println(temp);
+//                writer.write(temp+" \r\n");
+//            }
+//            writer.close();
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
         int cnt = 1;
