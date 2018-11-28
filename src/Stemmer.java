@@ -1,5 +1,6 @@
 import com.opencsv.CSVWriter;
-import java.io.File;
+import java.io.*;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
@@ -102,7 +103,7 @@ public class Stemmer {
         }
     }
 
-    public static void EvaluateCueScore() {
+    public static void EvaluateCueScore(){
         File cue_words = new File("cue_words.txt");
         Scanner sc = null;
         try {
@@ -164,7 +165,7 @@ public class Stemmer {
     public static void EvaluateNumValScore() {
         CharSequence[] ch = new CharSequence[10];
         //"0, ১, ২, ৩, ৪, ৫, ৬, ৭, ৮, ৯"
-        ch[0] = new StringBuffer("0");
+        ch[0] = new StringBuffer("০");
         ch[1] = new StringBuffer("১");
         ch[2] = new StringBuffer("২");
         ch[3] = new StringBuffer("৩");
@@ -235,6 +236,7 @@ public class Stemmer {
                     }
                 }
                 String []data = {df2.format(outputScore[j][0])+"", df2.format(outputScore[j][1])+"", outputScore[j][2]+"", outputScore[j][3]+"", df2.format(outputScore[j][4])+"", outputScore[j][5]+""};
+
                 writer.writeNext(data);
                 score[i][0] = s.tfscore;
                 score[i][1] = s.numScore;
@@ -243,6 +245,7 @@ public class Stemmer {
                 score[i][4] = s.topicScore;
                 score[i++][5] = s.posScore;
                 j++;
+
             }
             writer.close();
             return score;
