@@ -80,7 +80,7 @@ public class Stemmer {
                         //ekhane chilo
                     }
                     int temp = Integer.parseInt(cols[clusterSelect]);
-                    System.out.println(cols[clusterSelect]);
+                    //System.out.println(cols[clusterSelect]);
                     System.out.println(sen.get(temp).text + "। ");
                 }
             }
@@ -171,7 +171,7 @@ public class Stemmer {
                 }
             } else {
                 String paragraph = para.get(x - 1).para; //fetching the paragraph
-                System.out.println("para paise "+ para.get(x-1).para);
+                //System.out.println("para paise "+ para.get(x-1).para);
                 String[] sentences = Paragraph.createSentences(paragraph); //breaking the paragragh into sentences
                 String[] para_topic = Sentence.createWords(sentences[0]); //getting the paragraph topic sentence
                 for (int k = 0; k < sentences.length; k++) {
