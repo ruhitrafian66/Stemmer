@@ -35,7 +35,7 @@ public class Stemmer {
                             tsFlag = true;
                         }
                         String[] w = s[j].split(" ");
-                        sen.add(new Sentence(j, s[j], tsFlag, w.length, i + 1, totalPos));
+                        sen.add(new Sentence(j, s[j], tsFlag, w.length,  i, totalPos));
                         totalPos++;
                         for (int k = 0; k < w.length; k++) {
                             if (!(word.contains(w[k]))) {
@@ -55,9 +55,10 @@ public class Stemmer {
 //            System.out.println();
 //        }
         Rebuilder r = new Rebuilder();
-        r.Build(Finalize());
-    }
+        r.AggregateOutput(Finalize());
+//        r.FCMOutput();
 
+    }
 
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
@@ -188,25 +189,14 @@ public class Stemmer {
     }
 
     public static void EvaluatePositionScore() {
-        for (Paragraph pr : para) {
-
+        for(Sentence s: sen){
+            int paraLength = para.get(s.paraNo).size-1;
+            if(s.pos<=Math.ceil(0.2*paraLength)||s.pos>=Math.floor(0.8*paraLength)){
+                s.posScore = 1;
+            }
+            else s.posScore = 0;
         }
     }
-
-//        public static void EvaluatePositionScore () {
-//            for (Paragraph pr : para) {
-//                for (Sentence sc : sen) {
-//                    if (sc.paraNo == pr.paraNo && sc.pos <= Math.ceil(0.1 * pr.noOfSentences)) {
-//                        sc.posScore += 1;
-//                    } else if (sc.paraNo == pr.paraNo && sc.pos >= Math.floor(0.9 * pr.noOfSentences)) {
-//                        sc.posScore += 1;
-//                    } else if (sc.paraNo == pr.paraNo) {
-//                        sc.posScore += 0;
-//                    }
-//                }
-//            }
-//        }
-
 
     //    double array is array of scores for each sentence. first braces mean sentence index, second braces mean score
     public static double[][] Finalize() {
@@ -217,20 +207,34 @@ public class Stemmer {
         EvaluateTopicSentenceScore();
         EvaluatePositionScore();
         EvaluateNumValScore();
-
-
         try {
             File file = new File(".\\output.csv");
             FileWriter outputfile = new FileWriter(file);
             CSVWriter writer = new CSVWriter(outputfile);
-            String[] label = {"score1", "score2", "score3", "score4", "score5", "score6"};
+            String[] label = {"score1", "score2","score3","score4","score5","score6"};
             writer.writeNext(label);
             double[][] score = new double[sen.size()][6];
+            //this array is initiated for output only, optimize it if possible
+            double[][] outputScore = new double[sen.size()][6];
             int i = 0;
+            int j = 0;
             DecimalFormat df2 = new DecimalFormat("#.####");
             int c = 0;
             for (Sentence s : sen) {
-                String[] data = {df2.format(s.tfscore) + "", df2.format(s.numScore) + "", s.lenScore + "", s.cueScore + "", df2.format(s.topicScore) + "", s.posScore + ""};
+                outputScore[j][0] = s.tfscore;
+                outputScore[j][1] = s.numScore;
+                outputScore[j][2] = s.lenScore;
+                outputScore[j][3] = s.cueScore;
+                outputScore[j][4] = s.topicScore;
+                outputScore[j][5] = s.posScore;
+                for (int x=0; x<6; x++) {
+                    Double q = outputScore[j][x];
+                    //System.out.println(q);
+                    if(q.equals(Double.NaN)) {
+                        outputScore[j][x]=0;
+                    }
+                }
+                String []data = {df2.format(outputScore[j][0])+"", df2.format(outputScore[j][1])+"", outputScore[j][2]+"", outputScore[j][3]+"", df2.format(outputScore[j][4])+"", outputScore[j][5]+""};
                 writer.writeNext(data);
                 score[i][0] = s.tfscore;
                 score[i][1] = s.numScore;
@@ -238,6 +242,7 @@ public class Stemmer {
                 score[i][3] = s.cueScore;
                 score[i][4] = s.topicScore;
                 score[i++][5] = s.posScore;
+                j++;
             }
             writer.close();
             return score;
