@@ -13,6 +13,7 @@ public class Rebuilder {
 
     public void AggregateOutput(double[][] score) {
         try {
+            FileWriter writer = new FileWriter(new File("AggregateOutput.txt"));
             Score[] aggScore = new Score[score.length];
             for (int i = 0; i < score.length; i++) {
                 double temp = 0;
@@ -34,11 +35,12 @@ public class Rebuilder {
             String[] text = readText().split("।");
             String output = "";
             for(int c = 0; c<printIndex.length; c++){
-                output = text[printIndex[c]];
-//                System.out.println(text[printIndex[c]]);
-            }
-            FileWriter f = new FileWriter(new File(".\\output.txt"));
+//                System.out.println(printIndex[c]+"  "+text[printIndex[c]]);
 
+                output += text[printIndex[c]]+"। ";
+            }
+            writer.write(output);
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,12 +49,16 @@ public class Rebuilder {
     public void FCMOutput() {
         try {
             System.out.println("printing summary");
-            Scanner sc = new Scanner(new File("clusters.csv"));
             BufferedReader br = new BufferedReader(new FileReader("clusters.csv"));
+            FileWriter writer = new FileWriter("FCMOutput.txt");
             String line;
-            String []text = readText().split("। ");
+            String []text = readText().split("।");
+            for(int c = 0; c<text.length; c++){
+                System.out.println(c+" "+text[c]);
+            }
             int iteration = 0;
             int clusterSelect = 1;
+            String ret = "";
             while ((line = br.readLine()) != null) {
                 if (iteration == 0) {
                     iteration++;
@@ -71,9 +77,14 @@ public class Rebuilder {
                         }
                     }
                     int temp = Integer.parseInt(cols[clusterSelect]);
-                    System.out.println(text[temp]);
+
+//                    System.out.println(temp+"  "+text[temp]);
+//                    System.out.println(text[temp]);
+                    ret+=text[temp]+"।";
                 }
             }
+            writer.write(ret);
+            writer.close();;
         } catch (Exception e) {
             e.printStackTrace();
         }
