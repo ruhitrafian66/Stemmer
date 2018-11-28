@@ -1,5 +1,4 @@
 import com.opencsv.CSVWriter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -45,6 +44,7 @@ public class Stemmer {
                                 word.iterate(w[k]);
                             }
                         }
+
                     }
                 }
             }
@@ -57,6 +57,7 @@ public class Stemmer {
         Rebuilder r = new Rebuilder();
         r.Build(Finalize());
     }
+
 
     public static void EvaluateTFIDF() {
         double maxIDF = 0;
@@ -144,6 +145,7 @@ public class Stemmer {
             for (String t : temp) {
                 if (tsWords.contains(t)) {
                     s.topicScore++;
+
                 }
             }
         }
