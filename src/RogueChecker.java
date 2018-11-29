@@ -28,10 +28,12 @@ public class RogueChecker {
 //            }
 
             double common = 0;
-            for (String gs : goldString) {
-                for (String ts : testString) {
+
+
+            for (String gs : testString) {
+                for (String ts : goldString ) {
+//                    System.out.println("Comparing:");
 //                    System.out.println(gs);
-//                    System.out.println("Comparing with:");
 //                    System.out.println(ts);
                     if (gs.equals(ts)) {
 //                        System.out.println("Match!! Score is: " + common);
@@ -48,7 +50,7 @@ public class RogueChecker {
 //            System.out.println(goldString.length);
             double precision = common / testString.length;
             double recall = common / goldString.length;
-            double f1 = (Math.pow(precision, -1) + Math.pow(recall, -1)) / 2;
+            double f1 = Math.pow(((Math.pow(precision, -1) + Math.pow(recall, -1))) / 2,-1);
             System.out.println("Precision: " + precision);
             System.out.println("Recall: " + recall);
             System.out.println("F number: " + f1);

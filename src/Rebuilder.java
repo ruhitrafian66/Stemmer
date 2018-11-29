@@ -18,19 +18,20 @@ public class Rebuilder {
                 aggScore[i] = new Score(i, temp);
             }
             Arrays.sort(aggScore);
-            for (Score s : aggScore) {
-                System.out.print(s.toString()+", ");
-            }
-            int toPrint = (int) Math.ceil(aggScore.length / 4);
+//            for (Score s : aggScore) {
+//                System.out.print(s.toString()+", ");
+//            }
+            String[] text = readText().split("।");
+            String output = "";
+            int toPrint = (int) Math.ceil(aggScore.length / 2.2);
             int[] printIndex = new int[toPrint];
             for (int c = 0; c < printIndex.length; c++) {
                 printIndex[c] = aggScore[c].index;
+//                System.out.println(text[printIndex[c]]);
             }
             Arrays.sort(printIndex);
-            String[] text = readText().split("।");
-            String output = "";
+
             for (int c = 0; c < printIndex.length; c++) {
-                System.out.println(text[printIndex[c]]);
 //                System.out.println(printIndex[c]+"  "+text[printIndex[c]]);
 
                 output += text[printIndex[c]] + "।";

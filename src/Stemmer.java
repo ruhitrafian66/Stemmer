@@ -52,8 +52,8 @@ public class Stemmer {
 
         Rebuilder r = new Rebuilder();
         r.AggregateOutput(Finalize());
-//        r.FCMOutput();
-//        Rogue();
+        r.FCMOutput();
+        Rogue();
     }
 
     public static void Rogue(){
