@@ -1,0 +1,17 @@
+Evaluating TextRank
+Total sentences matched: 7.0
+Precision: 0.30434782608695654
+Recall: 0.4117647058823529
+F number: 2.857142857142857
+
+Evaluating Aggregate
+Total sentences matched: 8.0
+Precision: 0.8888888888888888
+Recall: 0.47058823529411764
+F number: 1.625
+
+Evaluating FCM Output
+Total sentences matched: 10.0
+Precision: 0.625
+Recall: 0.5882352941176471
+F number: 1.65

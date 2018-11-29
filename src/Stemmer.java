@@ -17,7 +17,7 @@ public class Stemmer {
     public static void main(String[] args) {
 
         String text = ActualStemmer.StemmedText();
-
+//
         sen = new ArrayList<>();
         word = new MyArrayList<>();
         para = new ArrayList<>();
@@ -49,15 +49,28 @@ public class Stemmer {
                 }
             }
         }
-//        for (int c = 0; c < sen.size(); c++) {
-//            Sentence se = sen.get(c);
-//            System.out.print(se.pos + " /" + se.truePos + ": " + se.toString());
-//            System.out.println();
-//        }
 
         Rebuilder r = new Rebuilder();
         r.AggregateOutput(Finalize());
 //        r.FCMOutput();
+//        Rogue();
+    }
+
+    public static void Rogue(){
+        RogueChecker rc = new RogueChecker();
+        //TextRankOutput.txt
+        //GoldOutput.txt
+        //FCMOutput.txt
+        //AggregateOutput.txt
+        System.out.println("Evaluating TextRank");
+        rc.check(".\\TextRankOutput.txt", ".\\GoldOutput.txt");
+        System.out.println();
+        System.out.println("Evaluating Aggregate");
+        rc.check(".\\AggregateOutput.txt", ".\\GoldOutput.txt");
+        System.out.println();
+        System.out.println("Evaluating FCM Output");
+        rc.check(".\\FCMOutput.txt", ".\\GoldOutput.txt");
+        System.out.println();
     }
 
     public static void StemCue(){
@@ -82,9 +95,7 @@ public class Stemmer {
         }
     }
 
-    public static void EvaluateTFIDF()
-
-    {
+    public static void EvaluateTFIDF(){
         double maxIDF = 0;
         int cnt = 1;
         for (Sentence s : sen) {
